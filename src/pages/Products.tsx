@@ -25,7 +25,7 @@ function Products() {
     setPage(1);
   }, [initialSearch, initialCategory]);
 
-  const products = useStorefrontProducts(search, page, category);
+  const products = useStorefrontProducts({ search, page, category });
 
   const total = products.data?.total ?? 0;
   const pageSize = 20;

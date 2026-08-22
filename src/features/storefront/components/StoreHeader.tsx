@@ -98,9 +98,11 @@ function StoreHeader() {
                     <SheetClose
                       render={
                         <Link
-                          to="/products"
-                          className="border-b py-4 text-base font-medium"
-                        />
+                          to="/categories"
+                          className="text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
+                        >
+                          Categories
+                        </Link>
                       }
                     >
                       Categories
@@ -178,7 +180,7 @@ function StoreHeader() {
             </Link>
 
             <Link
-              to="/products"
+              to="/categories"
               className="text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
             >
               Categories

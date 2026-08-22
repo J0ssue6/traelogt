@@ -7,7 +7,7 @@ import NotFound from "@/pages/NotFound";
 import Dashboard from "@/pages/admin/Dashboard";
 import AdminProducts from "@/pages/admin/Products";
 import ProductVariants from "@/pages/admin/ProductVariants";
-import Categories from "@/pages/admin/Categories";
+import AdminCategories from "@/pages/admin/Categories";
 import Orders from "@/pages/admin/Orders";
 
 import AdminLayout from "@/components/admin/AdminLayout";
@@ -22,6 +22,7 @@ import { AuthProvider } from "@/features/auth/auth-context";
 import AdminLogin from "./features/auth/AdminLogin";
 import ProtectedAdminRoute from "./features/auth/ProtectedAdminRoute";
 import { Toaster } from "./components/ui/sonner";
+import Categories from "./pages/Categories";
 
 function App() {
   return (
@@ -32,6 +33,8 @@ function App() {
             {/* PUBLIC STOREFRONT */}
 
             <Route path="/" element={<Home />} />
+
+            <Route path="/categories" element={<Categories />} />
 
             <Route path="/products" element={<Products />} />
 
@@ -63,7 +66,7 @@ function App() {
                   element={<ProductVariants />}
                 />
 
-                <Route path="categories" element={<Categories />} />
+                <Route path="categories" element={<AdminCategories />} />
 
                 <Route path="orders" element={<Orders />} />
               </Route>

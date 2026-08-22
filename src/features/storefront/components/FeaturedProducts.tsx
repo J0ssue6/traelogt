@@ -7,7 +7,10 @@ import ProductGrid from "./StorefrontProductCard";
 
 function FeaturedProducts() {
   const navigate = useNavigate();
-  const products = useStorefrontProducts("", 1);
+
+  const products = useStorefrontProducts({
+    page: 1,
+  });
 
   return (
     <section id="shop" className="border-b">

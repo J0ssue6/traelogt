@@ -21,42 +21,29 @@ export type StorefrontProductList = {
   total: number;
 };
 
-type StorefrontProductFilters = {
-  search?: string;
-  category?: string;
-};
-
 export async function getStorefrontProducts(
-  filters: StorefrontProductFilters = {},
+  search = "",
   page = 1,
+  categorySlug = "",
 ): Promise<StorefrontProductList> {
-  const { search = "", category = "" } = filters;
-
   const from = (page - 1) * PAGE_SIZE;
   const to = from + PAGE_SIZE - 1;
 
   let categoryId: string | null = null;
 
-  if (category.trim()) {
-    const { data: categoryData, error: categoryError } = await supabase
+  if (categorySlug.trim()) {
+    const { data: category, error: categoryError } = await supabase
       .from("categories")
       .select("id")
-      .eq("slug", category.trim())
+      .eq("slug", categorySlug.trim())
       .eq("active", true)
       .maybeSingle();
 
     if (categoryError) {
-      throw new Error("Unable to load product category.");
+      throw new Error("Unable to load category.");
     }
 
-    if (!categoryData) {
-      return {
-        products: [],
-        total: 0,
-      };
-    }
-
-    categoryId = categoryData.id;
+    categoryId = category?.id ?? null;
   }
 
   let query = supabase
@@ -152,12 +139,14 @@ export async function getStorefrontProducts(
 
   for (const variant of variants) {
     const existing = variantsMap.get(variant.product_id) ?? [];
+
     existing.push(variant);
     variantsMap.set(variant.product_id, existing);
   }
 
   for (const image of images) {
     const existing = imagesMap.get(image.product_id) ?? [];
+
     existing.push(image);
     imagesMap.set(image.product_id, existing);
   }

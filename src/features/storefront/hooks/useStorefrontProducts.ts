@@ -1,19 +1,21 @@
 import { useQuery } from "@tanstack/react-query";
 
 import { getStorefrontProducts } from "@/features/storefront/api/storefront.api";
-
 import { storefrontQueryKeys } from "@/features/storefront/query-keys";
 
-export function useStorefrontProducts(search = "", page = 1, category = "") {
+type UseStorefrontProductsOptions = {
+  search?: string;
+  page?: number;
+  category?: string;
+};
+
+export function useStorefrontProducts({
+  search = "",
+  page = 1,
+  category = "",
+}: UseStorefrontProductsOptions = {}) {
   return useQuery({
     queryKey: storefrontQueryKeys.productList(search, page, category),
-    queryFn: () =>
-      getStorefrontProducts(
-        {
-          search,
-          category,
-        },
-        page,
-      ),
+    queryFn: () => getStorefrontProducts(search, page, category),
   });
 }
