@@ -29,13 +29,19 @@ export async function getStorefrontProducts(
   const from = (page - 1) * PAGE_SIZE;
   const to = from + PAGE_SIZE - 1;
 
+  const trimmedSearch = search.trim();
+  const trimmedCategory = categorySlug.trim();
+
+  /*
+   * Resolve the explicit category filter first.
+   */
   let categoryId: string | null = null;
 
-  if (categorySlug.trim()) {
+  if (trimmedCategory) {
     const { data: category, error: categoryError } = await supabase
       .from("categories")
       .select("id")
-      .eq("slug", categorySlug.trim())
+      .eq("slug", trimmedCategory)
       .eq("active", true)
       .maybeSingle();
 
@@ -46,6 +52,38 @@ export async function getStorefrontProducts(
     categoryId = category?.id ?? null;
   }
 
+  /*
+   * If searching, find categories whose names match the search.
+   *
+   * This allows:
+   *
+   * search=apparel
+   *
+   * to find products belonging to the Apparel category even if
+   * "apparel" isn't part of the product name.
+   */
+  let matchingCategoryIds: string[] = [];
+
+  if (trimmedSearch) {
+    const { data: matchingCategories, error: categoriesSearchError } =
+      await supabase
+        .from("categories")
+        .select("id")
+        .eq("active", true)
+        .ilike("name", `%${trimmedSearch}%`);
+
+    if (categoriesSearchError) {
+      throw new Error("Unable to search categories.");
+    }
+
+    matchingCategoryIds = (matchingCategories ?? []).map(
+      (category) => category.id,
+    );
+  }
+
+  /*
+   * Build the product query.
+   */
   let query = supabase
     .from("products")
     .select("*", { count: "exact" })
@@ -53,12 +91,34 @@ export async function getStorefrontProducts(
     .order("created_at", { ascending: false })
     .range(from, to);
 
-  if (search.trim()) {
-    query = query.ilike("name", `%${search.trim()}%`);
-  }
-
+  /*
+   * Explicit category filter.
+   */
   if (categoryId) {
     query = query.eq("category_id", categoryId);
+  }
+
+  /*
+   * Marketplace search.
+   *
+   * Search product name OR description OR matching category.
+   *
+   * If an explicit category is already selected, the category part
+   * is unnecessary because the query is already restricted to it.
+   */
+  if (trimmedSearch) {
+    const searchConditions = [
+      `name.ilike.%${trimmedSearch}%`,
+      `description.ilike.%${trimmedSearch}%`,
+    ];
+
+    if (!categoryId && matchingCategoryIds.length > 0) {
+      searchConditions.push(
+        `category_id.in.(${matchingCategoryIds.join(",")})`,
+      );
+    }
+
+    query = query.or(searchConditions.join(","));
   }
 
   const { data: productsData, error: productsError, count } = await query;
@@ -78,6 +138,9 @@ export async function getStorefrontProducts(
 
   const productIds = products.map((product) => product.id);
 
+  /*
+   * Load variants and images for the products on this page.
+   */
   const [
     { data: variantsData, error: variantsError },
     { data: imagesData, error: imagesError },
@@ -107,6 +170,9 @@ export async function getStorefrontProducts(
   const variants = (variantsData ?? []) as ProductVariant[];
   const images = (imagesData ?? []) as ProductImage[];
 
+  /*
+   * Load categories for the products.
+   */
   const categoryIds = [
     ...new Set(
       products
@@ -134,6 +200,9 @@ export async function getStorefrontProducts(
     categories.map((category) => [category.id, category]),
   );
 
+  /*
+   * Group variants and images by product.
+   */
   const variantsMap = new Map<string, ProductVariant[]>();
   const imagesMap = new Map<string, ProductImage[]>();
 

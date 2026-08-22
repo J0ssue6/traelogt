@@ -99,10 +99,8 @@ function StoreHeader() {
                       render={
                         <Link
                           to="/categories"
-                          className="text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
-                        >
-                          Categories
-                        </Link>
+                          className="border-b py-4 text-base font-medium"
+                        />
                       }
                     >
                       Categories
@@ -192,16 +190,27 @@ function StoreHeader() {
             onSubmit={handleSearchSubmit}
             className="ml-auto hidden max-w-md flex-1 md:block lg:max-w-lg"
           >
-            <div className="relative">
-              <Search className="absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
+            <div className="flex items-center gap-2">
+              <div className="relative flex-1">
+                <Search className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
 
-              <Input
-                value={search}
-                onChange={(event) => setSearch(event.target.value)}
-                placeholder="Search products..."
-                aria-label="Search products"
-                className="h-10 rounded-full bg-muted/50 pl-9 pr-4"
-              />
+                <Input
+                  value={search}
+                  onChange={(event) => setSearch(event.target.value)}
+                  placeholder="Search products..."
+                  aria-label="Search products"
+                  className="h-10 rounded-full bg-muted/50 pl-9 pr-4"
+                />
+              </div>
+
+              <Button
+                type="submit"
+                size="sm"
+                className="h-10 gap-2 rounded-full px-4"
+              >
+                <Search />
+                Search
+              </Button>
             </div>
           </form>
 
