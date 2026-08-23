@@ -26,7 +26,7 @@ import Categories from "./pages/Categories";
 
 function App() {
   return (
-    <BrowserRouter basename="/traelogt">
+    <BrowserRouter>
       <AuthProvider>
         <CartProvider>
           <Routes>
