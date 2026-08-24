@@ -10,10 +10,12 @@ import {
   createCustomerOrder,
   type CheckoutCustomer,
 } from "@/features/checkout/api/checkout.api";
+import { useTranslation } from "react-i18next";
 
 function Checkout() {
   const navigate = useNavigate();
   const { items, subtotal, clearCart } = useCart();
+  const { t } = useTranslation("checkout");
 
   const [form, setForm] = useState<CheckoutCustomer>({
     customerName: "",
@@ -58,11 +60,7 @@ function Checkout() {
         },
       });
     } catch (err) {
-      setError(
-        err instanceof Error
-          ? err.message
-          : "Unable to place your order. Please try again.",
-      );
+      setError(err instanceof Error ? err.message : t("errors.unableToPlace"));
     } finally {
       setIsSubmitting(false);
     }
@@ -72,14 +70,14 @@ function Checkout() {
     return (
       <>
         <div className="mx-auto max-w-3xl px-6 py-20 text-center">
-          <h1 className="text-2xl font-bold">Your cart is empty</h1>
+          <h1 className="text-2xl font-bold"> {t("emptyCart.title")}</h1>
 
           <p className="mt-2 text-muted-foreground">
-            Add some products before checking out.
+            {t("emptyCart.description")}
           </p>
 
           <Button className="mt-6" onClick={() => navigate("/products")}>
-            Continue shopping
+            {t("emptyCart.action")}
           </Button>
         </div>
       </>
@@ -91,11 +89,11 @@ function Checkout() {
       <div className="mx-auto max-w-6xl px-6 py-12">
         <div className="mb-10">
           <p className="text-sm font-semibold uppercase tracking-[0.2em] text-accent">
-            Checkout
+            {t("header.eyebrow")}
           </p>
 
           <h1 className="mt-2 text-3xl font-bold tracking-tight sm:text-4xl">
-            Complete your order
+            {t("header.title")}
           </h1>
         </div>
 
@@ -105,14 +103,17 @@ function Checkout() {
             className="space-y-6 rounded-2xl border bg-card p-6"
           >
             <div>
-              <h2 className="text-lg font-semibold">Customer information</h2>
+              <h2 className="text-lg font-semibold"> {t("customer.title")}</h2>
               <p className="mt-1 text-sm text-muted-foreground">
-                Tell us where to send your order.
+                {t("customer.description")}
               </p>
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="customerName">Full name</Label>
+              <Label htmlFor="customerName">
+                {" "}
+                {t("customer.fields.fullName")}
+              </Label>
               <Input
                 id="customerName"
                 required
@@ -125,7 +126,10 @@ function Checkout() {
 
             <div className="grid gap-5 sm:grid-cols-2">
               <div className="space-y-2">
-                <Label htmlFor="customerPhone">Phone</Label>
+                <Label htmlFor="customerPhone">
+                  {" "}
+                  {t("customer.fields.phone")}
+                </Label>
                 <Input
                   id="customerPhone"
                   required
@@ -137,7 +141,10 @@ function Checkout() {
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="customerEmail">Email</Label>
+                <Label htmlFor="customerEmail">
+                  {" "}
+                  {t("customer.fields.email")}
+                </Label>
                 <Input
                   id="customerEmail"
                   type="email"
@@ -151,7 +158,10 @@ function Checkout() {
 
             <div className="grid gap-5 sm:grid-cols-2">
               <div className="space-y-2">
-                <Label htmlFor="department">Department</Label>
+                <Label htmlFor="department">
+                  {" "}
+                  {t("customer.fields.department")}
+                </Label>
                 <Input
                   id="department"
                   required
@@ -163,7 +173,10 @@ function Checkout() {
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="municipality">Municipality</Label>
+                <Label htmlFor="municipality">
+                  {" "}
+                  {t("customer.fields.municipality")}
+                </Label>
                 <Input
                   id="municipality"
                   required
@@ -176,7 +189,7 @@ function Checkout() {
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="address">Delivery address</Label>
+              <Label htmlFor="address"> {t("customer.fields.address")}</Label>
               <Textarea
                 id="address"
                 required
@@ -187,7 +200,7 @@ function Checkout() {
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="notes">Order notes</Label>
+              <Label htmlFor="notes"> {t("customer.fields.notes")}</Label>
               <Textarea
                 id="notes"
                 rows={3}
@@ -204,12 +217,12 @@ function Checkout() {
               className="w-full"
               disabled={isSubmitting}
             >
-              {isSubmitting ? "Placing order..." : "Place order"}
+              {isSubmitting ? t("order.placing") : t("order.place")}
             </Button>
           </form>
 
           <aside className="h-fit rounded-2xl border bg-card p-6 lg:sticky lg:top-6">
-            <h2 className="text-lg font-semibold">Order summary</h2>
+            <h2 className="text-lg font-semibold"> {t("order.summary")}</h2>
 
             <div className="mt-6 space-y-4">
               {items.map((item) => (
@@ -233,7 +246,7 @@ function Checkout() {
 
             <div className="mt-6 border-t pt-5">
               <div className="flex justify-between text-lg font-semibold">
-                <span>Total</span>
+                <span>{t("order.total")}</span>
                 <span>${subtotal.toFixed(2)}</span>
               </div>
             </div>

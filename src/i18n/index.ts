@@ -18,6 +18,8 @@ import esHome from "./locales/es/home";
 import enStorefront from "./locales/en/storefront";
 import enProductDetail from "./locales/en/productDetail";
 import esProductDetail from "./locales/es/productDetail";
+import enCheckout from "./locales/en/checkout";
+import esCheckout from "./locales/es/checkout";
 
 const resources = {
   en: {
@@ -29,6 +31,7 @@ const resources = {
     home: enHome,
     storefront: enStorefront,
     productDetail: enProductDetail,
+    checkout: enCheckout,
   },
 
   es: {
@@ -40,6 +43,7 @@ const resources = {
     home: esHome,
     storefront: esStorefront,
     productDetail: esProductDetail,
+    checkout: esCheckout,
   },
 };
 
