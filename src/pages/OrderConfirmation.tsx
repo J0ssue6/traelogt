@@ -7,6 +7,7 @@ import {
 } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -44,6 +45,7 @@ function OrderConfirmation() {
   const navigate = useNavigate();
   const { orderNumber = "" } = useParams();
   const location = useLocation();
+  const { t } = useTranslation("orderConfirmation");
 
   const confirmedOrderNumber =
     (location.state as { orderNumber?: string } | null)?.orderNumber ??
@@ -57,7 +59,6 @@ function OrderConfirmation() {
     useState<PaymentSettings | null>(null);
 
   const [order, setOrder] = useState<OrderDetails | null>(null);
-
   const [payment, setPayment] = useState<OrderPayment | null>(null);
 
   const [loading, setLoading] = useState(true);
@@ -144,12 +145,12 @@ function OrderConfirmation() {
     if (!file) return;
 
     if (!ALLOWED_TYPES.includes(file.type)) {
-      setUploadError("Please upload a JPG, PNG, or PDF file.");
+      setUploadError(t("receipt.errors.invalidFile"));
       return;
     }
 
     if (file.size > MAX_FILE_SIZE) {
-      setUploadError("The receipt must be 10 MB or smaller.");
+      setUploadError(t("receipt.errors.fileTooLarge"));
       return;
     }
 
@@ -178,7 +179,9 @@ function OrderConfirmation() {
         });
 
       if (uploadError) {
-        throw new Error(uploadError.message || "Unable to upload receipt.");
+        throw new Error(
+          uploadError.message || t("receipt.errors.uploadFailed"),
+        );
       }
 
       const { error: submitError } = await supabase.rpc(
@@ -194,7 +197,7 @@ function OrderConfirmation() {
         await supabase.storage.from("payment-receipts").remove([filePath]);
 
         throw new Error(
-          submitError.message || "Unable to submit payment receipt.",
+          submitError.message || t("receipt.errors.submitFailed"),
         );
       }
 
@@ -213,7 +216,7 @@ function OrderConfirmation() {
       setUploadError(
         error instanceof Error
           ? error.message
-          : "Unable to submit payment receipt.",
+          : t("receipt.errors.submitFailed"),
       );
     } finally {
       setUploading(false);
@@ -223,263 +226,254 @@ function OrderConfirmation() {
   const receiptSubmitted = payment?.status === "receipt_submitted";
 
   return (
-    <>
-      <div className="mx-auto max-w-3xl px-6 py-12">
-        <div className="text-center">
-          <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-accent/10">
-            <CheckCircle2 className="h-9 w-9 text-accent" />
-          </div>
-
-          <p className="mt-8 text-sm font-semibold uppercase tracking-[0.2em] text-accent">
-            Order received
-          </p>
-
-          <h1 className="mt-3 text-3xl font-bold tracking-tight sm:text-4xl">
-            Thank you for your order!
-          </h1>
-
-          <p className="mx-auto mt-4 max-w-xl text-muted-foreground">
-            Your order has been created. Please complete your bank transfer
-            using the information below to continue processing your order.
-          </p>
-
-          {confirmedOrderNumber && (
-            <div className="mx-auto mt-8 max-w-sm rounded-2xl border bg-card p-6">
-              <p className="text-sm text-muted-foreground">Order number</p>
-
-              <p className="mt-2 text-2xl font-bold">{confirmedOrderNumber}</p>
-            </div>
-          )}
+    <div className="mx-auto max-w-3xl px-6 py-12">
+      <div className="text-center">
+        <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-accent/10">
+          <CheckCircle2 className="h-9 w-9 text-accent" />
         </div>
 
-        {loading ? (
+        <p className="mt-8 text-sm font-semibold uppercase tracking-[0.2em] text-accent">
+          {t("header.eyebrow")}
+        </p>
+
+        <h1 className="mt-3 text-3xl font-bold tracking-tight sm:text-4xl">
+          {t("header.title")}
+        </h1>
+
+        <p className="mx-auto mt-4 max-w-xl text-muted-foreground">
+          {t("header.description")}
+        </p>
+
+        {confirmedOrderNumber && (
+          <div className="mx-auto mt-8 max-w-sm rounded-2xl border bg-card p-6">
+            <p className="text-sm text-muted-foreground">{t("orderNumber")}</p>
+
+            <p className="mt-2 text-2xl font-bold">{confirmedOrderNumber}</p>
+          </div>
+        )}
+      </div>
+
+      {loading ? (
+        <Card className="mt-8">
+          <CardContent className="py-10 text-center text-muted-foreground">
+            {t("loading")}
+          </CardContent>
+        </Card>
+      ) : paymentSettings ? (
+        <>
           <Card className="mt-8">
-            <CardContent className="py-10 text-center text-muted-foreground">
-              Loading payment instructions...
-            </CardContent>
-          </Card>
-        ) : paymentSettings ? (
-          <>
-            <Card className="mt-8">
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <CreditCard className="h-5 w-5" />
-                  Bank transfer instructions
-                </CardTitle>
-              </CardHeader>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <CreditCard className="h-5 w-5" />
+                {t("bankTransfer.title")}
+              </CardTitle>
+            </CardHeader>
 
-              <CardContent className="space-y-6">
-                <div className="rounded-xl border bg-muted/30 p-5">
+            <CardContent className="space-y-6">
+              <div className="rounded-xl border bg-muted/30 p-5">
+                <p className="text-sm text-muted-foreground">
+                  {t("bankTransfer.amount")}
+                </p>
+
+                <p className="mt-1 text-3xl font-bold">
+                  {paymentSettings.currency}{" "}
+                  {Number(order?.total ?? 0).toFixed(2)}
+                </p>
+              </div>
+
+              <div className="space-y-4">
+                <div>
                   <p className="text-sm text-muted-foreground">
-                    Amount to transfer
+                    {t("bankTransfer.bank")}
                   </p>
-
-                  <p className="mt-1 text-3xl font-bold">
-                    {paymentSettings.currency}{" "}
-                    {Number(order?.total ?? 0).toFixed(2)}
-                  </p>
+                  <p className="font-semibold">{paymentSettings.bank_name}</p>
                 </div>
 
-                <div className="space-y-4">
-                  <div>
-                    <p className="text-sm text-muted-foreground">Bank</p>
-
-                    <p className="font-semibold">{paymentSettings.bank_name}</p>
-                  </div>
-
-                  <div>
-                    <p className="text-sm text-muted-foreground">
-                      Account holder
-                    </p>
-
-                    <p className="font-semibold">
-                      {paymentSettings.account_holder}
-                    </p>
-                  </div>
-
-                  <div>
-                    <p className="text-sm text-muted-foreground">
-                      Account type
-                    </p>
-
-                    <p className="font-semibold capitalize">
-                      {paymentSettings.account_type ?? "Bank account"}
-                    </p>
-                  </div>
-
-                  <div>
-                    <p className="text-sm text-muted-foreground">
-                      Account number
-                    </p>
-
-                    <div className="mt-1 flex items-center gap-2">
-                      <p className="flex-1 rounded-lg border bg-muted px-4 py-3 font-mono text-lg font-semibold">
-                        {paymentSettings.account_number}
-                      </p>
-
-                      <Button
-                        type="button"
-                        variant="outline"
-                        size="icon"
-                        onClick={copyAccountNumber}
-                        title="Copy account number"
-                      >
-                        <Copy className="h-4 w-4" />
-                      </Button>
-                    </div>
-
-                    {copied && (
-                      <p className="mt-2 text-sm text-accent">
-                        Account number copied.
-                      </p>
-                    )}
-                  </div>
-                </div>
-
-                <Separator />
-
-                {paymentSettings.instructions && (
-                  <div>
-                    <h2 className="font-semibold">Important instructions</h2>
-
-                    <p className="mt-3 whitespace-pre-line leading-7 text-muted-foreground">
-                      {paymentSettings.instructions}
-                    </p>
-                  </div>
-                )}
-
-                <div className="rounded-xl border border-amber-200 bg-amber-50 p-5 dark:border-amber-900 dark:bg-amber-950/30">
-                  <p className="font-semibold">Important</p>
-
-                  <p className="mt-2 text-sm leading-6 text-muted-foreground">
-                    Please transfer the exact amount shown above and keep your
-                    payment receipt. After making the transfer, upload your
-                    receipt below.
+                <div>
+                  <p className="text-sm text-muted-foreground">
+                    {t("bankTransfer.accountHolder")}
+                  </p>
+                  <p className="font-semibold">
+                    {paymentSettings.account_holder}
                   </p>
                 </div>
-              </CardContent>
-            </Card>
 
-            <Card className="mt-8">
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  {receiptSubmitted ? (
-                    <FileCheck2 className="h-5 w-5" />
-                  ) : (
-                    <Upload className="h-5 w-5" />
-                  )}
+                <div>
+                  <p className="text-sm text-muted-foreground">
+                    {t("bankTransfer.accountType")}
+                  </p>
+                  <p className="font-semibold capitalize">
+                    {paymentSettings.account_type ??
+                      t("bankTransfer.defaultAccountType")}
+                  </p>
+                </div>
 
-                  {receiptSubmitted
-                    ? "Receipt submitted"
-                    : "Submit your payment receipt"}
-                </CardTitle>
-              </CardHeader>
+                <div>
+                  <p className="text-sm text-muted-foreground">
+                    {t("bankTransfer.accountNumber")}
+                  </p>
 
-              <CardContent>
-                {receiptSubmitted ? (
-                  <div className="rounded-xl border bg-muted/30 p-5">
-                    <p className="font-semibold">
-                      Your receipt has been submitted successfully.
+                  <div className="mt-1 flex items-center gap-2">
+                    <p className="flex-1 rounded-lg border bg-muted px-4 py-3 font-mono text-lg font-semibold">
+                      {paymentSettings.account_number}
                     </p>
-
-                    <p className="mt-2 text-sm leading-6 text-muted-foreground">
-                      We will verify your transfer and update your order once
-                      the payment has been confirmed.
-                    </p>
-
-                    <p className="mt-4 text-sm font-medium">
-                      Payment status:{" "}
-                      <span className="text-accent">Receipt submitted</span>
-                    </p>
-                  </div>
-                ) : (
-                  <div className="space-y-5">
-                    <div>
-                      <label
-                        htmlFor="payment-receipt"
-                        className="text-sm font-medium"
-                      >
-                        Payment receipt
-                      </label>
-
-                      <input
-                        ref={fileInputRef}
-                        id="payment-receipt"
-                        type="file"
-                        accept=".jpg,.jpeg,.png,.pdf,image/jpeg,image/png,application/pdf"
-                        onChange={handleFileChange}
-                        className="mt-2 block w-full cursor-pointer rounded-lg border bg-background p-3 text-sm"
-                      />
-
-                      <p className="mt-2 text-xs text-muted-foreground">
-                        JPG, PNG, or PDF. Maximum size: 10 MB.
-                      </p>
-                    </div>
-
-                    {selectedFile && (
-                      <div className="rounded-lg border bg-muted/30 p-4 text-sm">
-                        <p className="font-medium">Selected file</p>
-
-                        <p className="mt-1 text-muted-foreground">
-                          {selectedFile.name}
-                        </p>
-                      </div>
-                    )}
-
-                    {uploadError && (
-                      <div className="rounded-lg border border-destructive/30 bg-destructive/10 p-4 text-sm text-destructive">
-                        {uploadError}
-                      </div>
-                    )}
 
                     <Button
                       type="button"
-                      size="lg"
-                      className="w-full gap-2"
-                      disabled={
-                        !selectedFile ||
-                        uploading ||
-                        !payment?.receipt_upload_token
-                      }
-                      onClick={handleReceiptUpload}
+                      variant="outline"
+                      size="icon"
+                      onClick={copyAccountNumber}
+                      title={t("bankTransfer.copyAccountNumber")}
                     >
-                      <Upload className="h-4 w-4" />
-
-                      {uploading
-                        ? "Uploading receipt..."
-                        : "Submit payment receipt"}
+                      <Copy className="h-4 w-4" />
                     </Button>
                   </div>
-                )}
-              </CardContent>
-            </Card>
-          </>
-        ) : (
-          <Card className="mt-8">
-            <CardContent className="py-10 text-center">
-              <h2 className="font-semibold">
-                Payment instructions are temporarily unavailable.
-              </h2>
 
-              <p className="mt-2 text-sm text-muted-foreground">
-                Please contact us with your order number before making a
-                payment.
-              </p>
+                  {copied && (
+                    <p className="mt-2 text-sm text-accent">
+                      {t("bankTransfer.accountCopied")}
+                    </p>
+                  )}
+                </div>
+              </div>
+
+              <Separator />
+
+              {paymentSettings.instructions && (
+                <div>
+                  <h2 className="font-semibold">
+                    {t("bankTransfer.importantInstructions")}
+                  </h2>
+
+                  <p className="mt-3 whitespace-pre-line leading-7 text-muted-foreground">
+                    {paymentSettings.instructions}
+                  </p>
+                </div>
+              )}
+
+              <div className="rounded-xl border border-amber-200 bg-amber-50 p-5 dark:border-amber-900 dark:bg-amber-950/30">
+                <p className="font-semibold">{t("bankTransfer.important")}</p>
+
+                <p className="mt-2 text-sm leading-6 text-muted-foreground">
+                  {t("bankTransfer.importantDescription")}
+                </p>
+              </div>
             </CardContent>
           </Card>
-        )}
 
-        <div className="mt-8 flex justify-center">
-          <Button
-            variant="outline"
-            size="lg"
-            onClick={() => navigate("/products")}
-          >
-            Continue shopping
-          </Button>
-        </div>
+          <Card className="mt-8">
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                {receiptSubmitted ? (
+                  <FileCheck2 className="h-5 w-5" />
+                ) : (
+                  <Upload className="h-5 w-5" />
+                )}
+
+                {receiptSubmitted
+                  ? t("receipt.submittedTitle")
+                  : t("receipt.title")}
+              </CardTitle>
+            </CardHeader>
+
+            <CardContent>
+              {receiptSubmitted ? (
+                <div className="rounded-xl border bg-muted/30 p-5">
+                  <p className="font-semibold">{t("receipt.successTitle")}</p>
+
+                  <p className="mt-2 text-sm leading-6 text-muted-foreground">
+                    {t("receipt.successDescription")}
+                  </p>
+
+                  <p className="mt-4 text-sm font-medium">
+                    {t("receipt.paymentStatus")}{" "}
+                    <span className="text-accent">
+                      {t("receipt.statusSubmitted")}
+                    </span>
+                  </p>
+                </div>
+              ) : (
+                <div className="space-y-5">
+                  <div>
+                    <label
+                      htmlFor="payment-receipt"
+                      className="text-sm font-medium"
+                    >
+                      {t("receipt.fileLabel")}
+                    </label>
+
+                    <input
+                      ref={fileInputRef}
+                      id="payment-receipt"
+                      type="file"
+                      accept=".jpg,.jpeg,.png,.pdf,image/jpeg,image/png,application/pdf"
+                      onChange={handleFileChange}
+                      className="mt-2 block w-full cursor-pointer rounded-lg border bg-background p-3 text-sm"
+                    />
+
+                    <p className="mt-2 text-xs text-muted-foreground">
+                      {t("receipt.fileHelp")}
+                    </p>
+                  </div>
+
+                  {selectedFile && (
+                    <div className="rounded-lg border bg-muted/30 p-4 text-sm">
+                      <p className="font-medium">{t("receipt.selectedFile")}</p>
+
+                      <p className="mt-1 text-muted-foreground">
+                        {selectedFile.name}
+                      </p>
+                    </div>
+                  )}
+
+                  {uploadError && (
+                    <div className="rounded-lg border border-destructive/30 bg-destructive/10 p-4 text-sm text-destructive">
+                      {uploadError}
+                    </div>
+                  )}
+
+                  <Button
+                    type="button"
+                    size="lg"
+                    className="w-full gap-2"
+                    disabled={
+                      !selectedFile ||
+                      uploading ||
+                      !payment?.receipt_upload_token
+                    }
+                    onClick={handleReceiptUpload}
+                  >
+                    <Upload className="h-4 w-4" />
+
+                    {uploading ? t("receipt.uploading") : t("receipt.submit")}
+                  </Button>
+                </div>
+              )}
+            </CardContent>
+          </Card>
+        </>
+      ) : (
+        <Card className="mt-8">
+          <CardContent className="py-10 text-center">
+            <h2 className="font-semibold">{t("unavailable.title")}</h2>
+
+            <p className="mt-2 text-sm text-muted-foreground">
+              {t("unavailable.description")}
+            </p>
+          </CardContent>
+        </Card>
+      )}
+
+      <div className="mt-8 flex justify-center">
+        <Button
+          variant="outline"
+          size="lg"
+          onClick={() => navigate("/products")}
+        >
+          {t("actions.continueShopping")}
+        </Button>
       </div>
-    </>
+    </div>
   );
 }
 

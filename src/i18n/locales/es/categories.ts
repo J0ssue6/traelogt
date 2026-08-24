@@ -1,8 +1,10 @@
 const categories = {
-  title: "Categorías",
-  description: "Explora productos por categoría.",
-  empty: "No hay categorías disponibles.",
-  viewProducts: "Ver productos",
-} as const;
+  header: {
+    eyebrow: "Explora",
+    title: "Comprar por categoría",
+    description:
+      "Encuentra exactamente lo que buscas explorando nuestras categorías.",
+  },
+};
 
 export default categories;

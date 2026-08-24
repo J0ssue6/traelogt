@@ -1,20 +1,24 @@
+import { useTranslation } from "react-i18next";
+
 import CategoryGrid from "@/features/products/components/CategoryGrid";
 
 function Categories() {
+  const { t } = useTranslation("categories");
+
   return (
     <>
       <section className="border-b">
         <div className="mx-auto max-w-7xl px-6 py-14">
           <p className="text-sm font-semibold uppercase tracking-[0.2em] text-accent">
-            Explore
+            {t("header.eyebrow")}
           </p>
 
           <h1 className="mt-3 text-4xl font-bold tracking-tight sm:text-5xl">
-            Shop by category
+            {t("header.title")}
           </h1>
 
           <p className="mt-4 max-w-2xl text-muted-foreground">
-            Find exactly what you're looking for by browsing our categories.
+            {t("header.description")}
           </p>
         </div>
       </section>

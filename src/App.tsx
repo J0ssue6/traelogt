@@ -41,12 +41,11 @@ function App() {
               <Route path="/products/:slug" element={<ProductDetail />} />
               <Route path="/cart" element={<Cart />} />
               <Route path="/checkout" element={<Checkout />} />
+              <Route
+                path="/order-confirmation/:orderNumber"
+                element={<OrderConfirmation />}
+              />
             </Route>
-
-            <Route
-              path="/order-confirmation/:orderNumber"
-              element={<OrderConfirmation />}
-            />
 
             {/* ADMIN LOGIN */}
 
