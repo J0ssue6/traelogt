@@ -17,6 +17,7 @@ import { useCart } from "@/features/cart/cart-context";
 import logo from "@/assets/logo.png";
 import LanguageSwitcher from "@/features/i18n/components/LanguageSwitcher";
 import { useTranslation } from "react-i18next";
+import { ThemeToggle } from "@/components/ThemeToggle";
 
 function StoreHeader() {
   const { itemCount } = useCart();
@@ -75,7 +76,7 @@ function StoreHeader() {
 
                 <div className="flex flex-col px-6 py-6">
                   <nav className="flex flex-col">
-                    {/* SheetClose with Link: nativeButton={false} */}
+                    {/* Navigation links with SheetClose */}
                     <SheetClose
                       nativeButton={false}
                       render={
@@ -87,7 +88,6 @@ function StoreHeader() {
                         </Link>
                       }
                     />
-
                     <SheetClose
                       nativeButton={false}
                       render={
@@ -99,7 +99,6 @@ function StoreHeader() {
                         </Link>
                       }
                     />
-
                     <SheetClose
                       nativeButton={false}
                       render={
@@ -111,7 +110,6 @@ function StoreHeader() {
                         </Link>
                       }
                     />
-
                     <SheetClose
                       nativeButton={false}
                       render={
@@ -146,7 +144,6 @@ function StoreHeader() {
                           setMobileSearch(event.target.value)
                         }
                       />
-                      {/* SheetClose with Button: nativeButton={true} (default) */}
                       <SheetClose
                         render={
                           <Button
@@ -167,8 +164,10 @@ function StoreHeader() {
                     <p className="mb-3 text-sm font-medium text-muted-foreground">
                       {t("header.language.label")}
                     </p>
-                    <div className="w-full">
+                    {/* Mobile: LanguageSwitcher + ThemeToggle stacked */}
+                    <div className="flex flex-col gap-3">
                       <LanguageSwitcher />
+                      <ThemeToggle />
                     </div>
                   </div>
                 </div>
@@ -245,8 +244,9 @@ function StoreHeader() {
             <Search />
           </Button>
 
-          {/* Desktop language */}
-          <div className="hidden md:block">
+          {/* Desktop actions: ThemeToggle + LanguageSwitcher */}
+          <div className="hidden items-center gap-2 md:flex">
+            <ThemeToggle />
             <LanguageSwitcher />
           </div>
 

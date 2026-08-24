@@ -1,4 +1,10 @@
 const storefront = {
+  theme: {
+    toggle: "Cambiar tema",
+    light: "Claro",
+    dark: "Oscuro",
+    system: "Sistema",
+  },
   header: {
     navigation: {
       home: "Inicio",
