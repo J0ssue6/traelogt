@@ -71,9 +71,7 @@ function Checkout() {
 
   if (items.length === 0) {
     return (
-      <main className="min-h-screen bg-background">
-        <StoreHeader />
-
+      <>
         <div className="mx-auto max-w-3xl px-6 py-20 text-center">
           <h1 className="text-2xl font-bold">Your cart is empty</h1>
 
@@ -85,7 +83,7 @@ function Checkout() {
             Continue shopping
           </Button>
         </div>
-      </main>
+      </>
     );
   }
 

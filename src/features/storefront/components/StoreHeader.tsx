@@ -14,10 +14,14 @@ import {
 } from "@/components/ui/sheet";
 
 import { useCart } from "@/features/cart/cart-context";
+import logo from "@/assets/logo.png";
+import LanguageSwitcher from "@/features/i18n/components/LanguageSwitcher";
+import { useTranslation } from "react-i18next";
 
 function StoreHeader() {
   const { itemCount } = useCart();
   const navigate = useNavigate();
+  const { t } = useTranslation("storefront");
 
   const [search, setSearch] = useState("");
   const [mobileSearch, setMobileSearch] = useState("");
@@ -57,7 +61,7 @@ function StoreHeader() {
                   <Button
                     variant="ghost"
                     size="icon"
-                    aria-label="Open navigation menu"
+                    aria-label={t("header.accessibility.openMenu")}
                   />
                 }
               >
@@ -81,7 +85,7 @@ function StoreHeader() {
                         />
                       }
                     >
-                      Home
+                      {t("header.navigation.home")}
                     </SheetClose>
 
                     <SheetClose
@@ -92,7 +96,7 @@ function StoreHeader() {
                         />
                       }
                     >
-                      Shop
+                      {t("header.navigation.shop")}
                     </SheetClose>
 
                     <SheetClose
@@ -103,7 +107,7 @@ function StoreHeader() {
                         />
                       }
                     >
-                      Categories
+                      {t("header.navigation.categories")}
                     </SheetClose>
 
                     <SheetClose
@@ -114,7 +118,7 @@ function StoreHeader() {
                         />
                       }
                     >
-                      <span>Cart</span>
+                      <span>{t("header.navigation.cart")}</span>
 
                       {itemCount > 0 && (
                         <span className="rounded-full bg-accent px-2 py-0.5 text-xs font-bold text-accent-foreground">
@@ -129,17 +133,17 @@ function StoreHeader() {
                       htmlFor="mobile-store-search"
                       className="mb-2 block text-sm font-medium"
                     >
-                      Search products
+                      {t("header.search.label")}
                     </label>
 
                     <div className="flex gap-2">
                       <Input
                         id="mobile-store-search"
+                        placeholder={t("header.search.mobilePlaceholder")}
                         value={mobileSearch}
                         onChange={(event) =>
                           setMobileSearch(event.target.value)
                         }
-                        placeholder="What are you looking for?"
                       />
 
                       <SheetClose
@@ -147,7 +151,9 @@ function StoreHeader() {
                           <Button
                             type="submit"
                             size="icon"
-                            aria-label="Search products"
+                            aria-label={t(
+                              "header.accessibility.searchProducts",
+                            )}
                           />
                         }
                       >
@@ -155,17 +161,35 @@ function StoreHeader() {
                       </SheetClose>
                     </div>
                   </form>
+
+                  <div className="mt-6 border-t pt-6">
+                    <p className="mb-3 text-sm font-medium text-muted-foreground">
+                      {t("header.language.label")}
+                    </p>
+
+                    <div className="w-full">
+                      <LanguageSwitcher />
+                    </div>
+                  </div>
                 </div>
               </SheetContent>
             </Sheet>
           </div>
 
-          {/* Logo */}
           <Link
             to="/"
-            className="shrink-0 text-xl font-bold tracking-tight sm:text-2xl"
+            className="flex shrink-0 items-center text-xl font-bold tracking-tight sm:text-2xl"
           >
-            Trae<span className="text-accent">logt</span>
+            <img
+              src={logo}
+              alt=""
+              aria-hidden="true"
+              className="h-9 w-auto object-contain sm:h-10"
+            />
+
+            <span>
+              Trae<span className="text-accent">logt</span>
+            </span>
           </Link>
 
           {/* Desktop navigation */}
@@ -174,14 +198,14 @@ function StoreHeader() {
               to="/products"
               className="text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
             >
-              Shop
+              {t("header.navigation.shop")}
             </Link>
 
             <Link
               to="/categories"
               className="text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
             >
-              Categories
+              {t("header.navigation.categories")}
             </Link>
           </nav>
 
@@ -197,7 +221,7 @@ function StoreHeader() {
                 <Input
                   value={search}
                   onChange={(event) => setSearch(event.target.value)}
-                  placeholder="Search products..."
+                  placeholder={t("header.search.placeholder")}
                   aria-label="Search products"
                   className="h-10 rounded-full bg-muted/50 pl-9 pr-4"
                 />
@@ -209,7 +233,7 @@ function StoreHeader() {
                 className="h-10 gap-2 rounded-full px-4"
               >
                 <Search />
-                Search
+                {t("header.search.button")}
               </Button>
             </div>
           </form>
@@ -219,16 +243,21 @@ function StoreHeader() {
             variant="ghost"
             size="icon"
             className="ml-auto md:hidden"
-            aria-label="Search products"
+            aria-label={t("header.accessibility.searchProducts")}
             onClick={() => navigate("/products")}
           >
             <Search />
           </Button>
 
+          {/* Desktop language */}
+          <div className="hidden md:block">
+            <LanguageSwitcher />
+          </div>
+
           {/* Cart */}
           <Link
             to="/cart"
-            aria-label={`Shopping bag${
+            aria-label={`${t("header.accessibility.shoppingBag")}${
               itemCount > 0 ? `, ${itemCount} items` : ""
             }`}
           >

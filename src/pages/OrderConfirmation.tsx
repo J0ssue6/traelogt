@@ -12,7 +12,6 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 
-import StoreHeader from "@/features/storefront/components/StoreHeader";
 import { supabase } from "@/lib/supabase";
 
 type PaymentSettings = {
@@ -224,9 +223,7 @@ function OrderConfirmation() {
   const receiptSubmitted = payment?.status === "receipt_submitted";
 
   return (
-    <main className="min-h-screen bg-background">
-      <StoreHeader />
-
+    <>
       <div className="mx-auto max-w-3xl px-6 py-12">
         <div className="text-center">
           <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-accent/10">
@@ -482,7 +479,7 @@ function OrderConfirmation() {
           </Button>
         </div>
       </div>
-    </main>
+    </>
   );
 }
 

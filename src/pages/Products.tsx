@@ -5,7 +5,6 @@ import { useSearchParams } from "react-router-dom";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 
-import StoreHeader from "@/features/storefront/components/StoreHeader";
 import { useStorefrontProducts } from "@/features/storefront/hooks/useStorefrontProducts";
 import ProductGrid from "@/features/storefront/components/StorefrontProductCard";
 
@@ -57,9 +56,7 @@ function Products() {
   };
 
   return (
-    <main className="min-h-screen bg-background">
-      <StoreHeader />
-
+    <>
       <section className="border-b">
         <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 sm:py-14">
           <p className="text-sm font-semibold uppercase tracking-[0.2em] text-accent">
@@ -179,7 +176,7 @@ function Products() {
           </>
         )}
       </section>
-    </main>
+    </>
   );
 }
 

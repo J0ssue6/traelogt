@@ -1,11 +1,8 @@
-import StoreHeader from "@/features/storefront/components/StoreHeader";
 import CategoryGrid from "@/features/products/components/CategoryGrid";
 
 function Categories() {
   return (
-    <main className="min-h-screen bg-background">
-      <StoreHeader />
-
+    <>
       <section className="border-b">
         <div className="mx-auto max-w-7xl px-6 py-14">
           <p className="text-sm font-semibold uppercase tracking-[0.2em] text-accent">
@@ -25,7 +22,7 @@ function Categories() {
       <section className="mx-auto max-w-7xl px-6 py-12">
         <CategoryGrid />
       </section>
-    </main>
+    </>
   );
 }
 

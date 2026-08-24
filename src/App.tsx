@@ -10,7 +10,7 @@ import ProductVariants from "@/pages/admin/ProductVariants";
 import AdminCategories from "@/pages/admin/Categories";
 import Orders from "@/pages/admin/Orders";
 
-import AdminLayout from "@/components/admin/AdminLayout";
+import AdminLayout from "@/layouts/AdminLayout";
 
 import ProductDetail from "./pages/ProductDetail";
 import Cart from "./pages/Cart";
@@ -23,26 +23,25 @@ import AdminLogin from "./features/auth/AdminLogin";
 import ProtectedAdminRoute from "./features/auth/ProtectedAdminRoute";
 import { Toaster } from "./components/ui/sonner";
 import Categories from "./pages/Categories";
+import StorefrontLayout from "./layouts/StorefrontLayout";
+import ScrollToTop from "./components/ScrollTop";
 
 function App() {
   return (
     <BrowserRouter>
+      <ScrollToTop />
       <AuthProvider>
         <CartProvider>
           <Routes>
             {/* PUBLIC STOREFRONT */}
-
-            <Route path="/" element={<Home />} />
-
-            <Route path="/categories" element={<Categories />} />
-
-            <Route path="/products" element={<Products />} />
-
-            <Route path="/products/:slug" element={<ProductDetail />} />
-
-            <Route path="/cart" element={<Cart />} />
-
-            <Route path="/checkout" element={<Checkout />} />
+            <Route element={<StorefrontLayout />}>
+              <Route path="/" element={<Home />} />
+              <Route path="/categories" element={<Categories />} />
+              <Route path="/products" element={<Products />} />
+              <Route path="/products/:slug" element={<ProductDetail />} />
+              <Route path="/cart" element={<Cart />} />
+              <Route path="/checkout" element={<Checkout />} />
+            </Route>
 
             <Route
               path="/order-confirmation/:orderNumber"

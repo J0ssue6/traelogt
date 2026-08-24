@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 
 function NotFound() {
   return (
-    <main className="flex min-h-screen items-center justify-center bg-background px-6">
+    <>
       <div className="w-full max-w-lg text-center">
         <p className="text-sm font-semibold uppercase tracking-[0.2em] text-accent">
           Traelogt
@@ -22,7 +22,7 @@ function NotFound() {
           <Link to="/products">Shop products</Link>
         </div>
       </div>
-    </main>
+    </>
   );
 }
 

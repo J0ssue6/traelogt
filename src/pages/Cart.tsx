@@ -3,7 +3,6 @@ import { Link, useNavigate } from "react-router-dom";
 
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
-import StoreHeader from "@/features/storefront/components/StoreHeader";
 import { useCart } from "@/features/cart/cart-context";
 
 function Cart() {
@@ -12,9 +11,7 @@ function Cart() {
   const { items, itemCount, subtotal, updateQuantity, removeItem } = useCart();
 
   return (
-    <main className="min-h-screen bg-background">
-      <StoreHeader />
-
+    <>
       <div className="mx-auto max-w-7xl px-6 py-12">
         <div className="mb-10">
           <p className="text-sm font-semibold uppercase tracking-[0.2em] text-accent">
@@ -170,7 +167,7 @@ function Cart() {
           </div>
         )}
       </div>
-    </main>
+    </>
   );
 }
 

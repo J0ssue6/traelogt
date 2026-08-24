@@ -23,9 +23,7 @@ function ProductDetail() {
 
   if (product.isLoading) {
     return (
-      <main className="min-h-screen bg-background">
-        <StoreHeader />
-
+      <>
         <div className="mx-auto grid max-w-7xl gap-10 px-6 py-12 lg:grid-cols-2">
           <Skeleton className="aspect-square w-full rounded-2xl" />
 
@@ -37,7 +35,7 @@ function ProductDetail() {
             <Skeleton className="h-12 w-full" />
           </div>
         </div>
-      </main>
+      </>
     );
   }
 
