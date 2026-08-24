@@ -28,12 +28,10 @@ function StoreHeader() {
 
   const submitSearch = (value: string) => {
     const trimmed = value.trim();
-
     if (!trimmed) {
       navigate("/products");
       return;
     }
-
     navigate(`/products?search=${encodeURIComponent(trimmed)}`);
   };
 
@@ -62,11 +60,11 @@ function StoreHeader() {
                     variant="ghost"
                     size="icon"
                     aria-label={t("header.accessibility.openMenu")}
-                  />
+                  >
+                    <Menu />
+                  </Button>
                 }
-              >
-                <Menu />
-              </SheetTrigger>
+              />
 
               <SheetContent side="left" className="w-[85%] sm:max-w-sm">
                 <SheetHeader className="border-b px-6 py-5">
@@ -77,55 +75,59 @@ function StoreHeader() {
 
                 <div className="flex flex-col px-6 py-6">
                   <nav className="flex flex-col">
+                    {/* SheetClose with Link: nativeButton={false} */}
                     <SheetClose
+                      nativeButton={false}
                       render={
                         <Link
                           to="/"
                           className="border-b py-4 text-base font-medium"
-                        />
+                        >
+                          {t("header.navigation.home")}
+                        </Link>
                       }
-                    >
-                      {t("header.navigation.home")}
-                    </SheetClose>
+                    />
 
                     <SheetClose
+                      nativeButton={false}
                       render={
                         <Link
                           to="/products"
                           className="border-b py-4 text-base font-medium"
-                        />
+                        >
+                          {t("header.navigation.shop")}
+                        </Link>
                       }
-                    >
-                      {t("header.navigation.shop")}
-                    </SheetClose>
+                    />
 
                     <SheetClose
+                      nativeButton={false}
                       render={
                         <Link
                           to="/categories"
                           className="border-b py-4 text-base font-medium"
-                        />
+                        >
+                          {t("header.navigation.categories")}
+                        </Link>
                       }
-                    >
-                      {t("header.navigation.categories")}
-                    </SheetClose>
+                    />
 
                     <SheetClose
+                      nativeButton={false}
                       render={
                         <Link
                           to="/cart"
                           className="flex items-center justify-between border-b py-4 text-base font-medium"
-                        />
+                        >
+                          <span>{t("header.navigation.cart")}</span>
+                          {itemCount > 0 && (
+                            <span className="rounded-full bg-accent px-2 py-0.5 text-xs font-bold text-accent-foreground">
+                              {itemCount}
+                            </span>
+                          )}
+                        </Link>
                       }
-                    >
-                      <span>{t("header.navigation.cart")}</span>
-
-                      {itemCount > 0 && (
-                        <span className="rounded-full bg-accent px-2 py-0.5 text-xs font-bold text-accent-foreground">
-                          {itemCount}
-                        </span>
-                      )}
-                    </SheetClose>
+                    />
                   </nav>
 
                   <form onSubmit={handleMobileSearchSubmit} className="mt-8">
@@ -135,7 +137,6 @@ function StoreHeader() {
                     >
                       {t("header.search.label")}
                     </label>
-
                     <div className="flex gap-2">
                       <Input
                         id="mobile-store-search"
@@ -145,7 +146,7 @@ function StoreHeader() {
                           setMobileSearch(event.target.value)
                         }
                       />
-
+                      {/* SheetClose with Button: nativeButton={true} (default) */}
                       <SheetClose
                         render={
                           <Button
@@ -154,11 +155,11 @@ function StoreHeader() {
                             aria-label={t(
                               "header.accessibility.searchProducts",
                             )}
-                          />
+                          >
+                            <Search />
+                          </Button>
                         }
-                      >
-                        <Search />
-                      </SheetClose>
+                      />
                     </div>
                   </form>
 
@@ -166,7 +167,6 @@ function StoreHeader() {
                     <p className="mb-3 text-sm font-medium text-muted-foreground">
                       {t("header.language.label")}
                     </p>
-
                     <div className="w-full">
                       <LanguageSwitcher />
                     </div>
@@ -186,7 +186,6 @@ function StoreHeader() {
               aria-hidden="true"
               className="h-9 w-auto object-contain sm:h-10"
             />
-
             <span>
               Trae<span className="text-accent">logt</span>
             </span>
@@ -200,7 +199,6 @@ function StoreHeader() {
             >
               {t("header.navigation.shop")}
             </Link>
-
             <Link
               to="/categories"
               className="text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
@@ -217,7 +215,6 @@ function StoreHeader() {
             <div className="flex items-center gap-2">
               <div className="relative flex-1">
                 <Search className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
-
                 <Input
                   value={search}
                   onChange={(event) => setSearch(event.target.value)}
@@ -226,7 +223,6 @@ function StoreHeader() {
                   className="h-10 rounded-full bg-muted/50 pl-9 pr-4"
                 />
               </div>
-
               <Button
                 type="submit"
                 size="sm"
@@ -263,7 +259,6 @@ function StoreHeader() {
           >
             <Button variant="ghost" size="icon" className="relative">
               <ShoppingBag />
-
               {itemCount > 0 && (
                 <span className="absolute -right-1 -top-1 flex h-5 min-w-5 items-center justify-center rounded-full bg-accent px-1 text-[10px] font-bold text-accent-foreground">
                   {itemCount > 99 ? "99+" : itemCount}

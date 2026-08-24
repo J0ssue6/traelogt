@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Search, X } from "lucide-react";
 import { useSearchParams } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -9,6 +10,7 @@ import { useStorefrontProducts } from "@/features/storefront/hooks/useStorefront
 import ProductGrid from "@/features/storefront/components/StorefrontProductCard";
 
 function Products() {
+  const { t } = useTranslation("storefront");
   const [searchParams, setSearchParams] = useSearchParams();
 
   const initialSearch = searchParams.get("search") ?? "";
@@ -55,22 +57,27 @@ function Products() {
     setSearchParams({});
   };
 
+  // Format category name for display
+  const formattedCategory = category ? category.replace(/-/g, " ") : "";
+
   return (
     <>
       <section className="border-b">
         <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 sm:py-14">
           <p className="text-sm font-semibold uppercase tracking-[0.2em] text-accent">
-            Shop
+            {t("header.navigation.shop")}
           </p>
 
           <h1 className="mt-3 text-4xl font-bold tracking-tight sm:text-5xl">
-            {category ? "Shop by category" : "All products"}
+            {category ? t("products.titleWithCategory") : t("products.title")}
           </h1>
 
           <p className="mt-4 max-w-2xl text-muted-foreground">
             {category
-              ? `Browse products in the ${category.replace(/-/g, " ")} category.`
-              : "Browse everything currently available on Traelogt."}
+              ? t("products.categoryDescription", {
+                  category: formattedCategory,
+                })
+              : t("products.description")}
           </p>
 
           <div className="mt-8 flex max-w-2xl flex-col gap-3 sm:flex-row">
@@ -80,7 +87,7 @@ function Products() {
               <Input
                 value={search}
                 onChange={(event) => handleSearch(event.target.value)}
-                placeholder="Search products..."
+                placeholder={t("products.searchPlaceholder")}
                 className="h-11 pl-9"
               />
             </div>
@@ -93,7 +100,7 @@ function Products() {
                 onClick={clearFilters}
               >
                 <X />
-                Clear
+                {t("products.clear")}
               </Button>
             )}
           </div>
@@ -103,10 +110,10 @@ function Products() {
       <section className="mx-auto max-w-7xl px-4 py-10 sm:px-6 sm:py-12">
         {products.isError ? (
           <div className="rounded-xl border border-destructive/20 bg-destructive/5 p-8 text-center">
-            <h2 className="font-semibold">Unable to load products</h2>
+            <h2 className="font-semibold">{t("products.error.title")}</h2>
 
             <p className="mt-2 text-sm text-muted-foreground">
-              Please try again shortly.
+              {t("products.error.description")}
             </p>
 
             <Button
@@ -114,7 +121,7 @@ function Products() {
               className="mt-5"
               onClick={() => products.refetch()}
             >
-              Try again
+              {t("products.error.retry")}
             </Button>
           </div>
         ) : (
@@ -122,17 +129,17 @@ function Products() {
             <div className="mb-6 flex items-center justify-between">
               <p className="text-sm text-muted-foreground">
                 {products.isLoading
-                  ? "Loading products..."
-                  : `${total} ${total === 1 ? "product" : "products"}`}
+                  ? t("products.loading")
+                  : t("products.productCount", { count: total })}
               </p>
             </div>
 
             {!products.isLoading && products.data?.products.length === 0 ? (
               <div className="rounded-xl border border-dashed p-12 text-center">
-                <h2 className="font-semibold">No products found</h2>
+                <h2 className="font-semibold">{t("products.empty.title")}</h2>
 
                 <p className="mt-2 text-sm text-muted-foreground">
-                  Try a different search or browse all products.
+                  {t("products.empty.description")}
                 </p>
 
                 <Button
@@ -140,7 +147,7 @@ function Products() {
                   className="mt-5"
                   onClick={clearFilters}
                 >
-                  View all products
+                  {t("products.empty.viewAll")}
                 </Button>
               </div>
             ) : (
@@ -157,11 +164,14 @@ function Products() {
                   disabled={page === 1 || products.isFetching}
                   onClick={() => setPage((current) => current - 1)}
                 >
-                  Previous
+                  {t("products.pagination.previous")}
                 </Button>
 
                 <span className="text-sm text-muted-foreground">
-                  Page {page} of {totalPages}
+                  {t("products.pagination.pageOf", {
+                    current: page,
+                    total: totalPages,
+                  })}
                 </span>
 
                 <Button
@@ -169,7 +179,7 @@ function Products() {
                   disabled={page === totalPages || products.isFetching}
                   onClick={() => setPage((current) => current + 1)}
                 >
-                  Next
+                  {t("products.pagination.next")}
                 </Button>
               </div>
             )}
