@@ -37,15 +37,20 @@ function Categories() {
   };
 
   return (
-    <div className="space-y-6">
+    <div className="w-full min-w-0 space-y-6">
+      {/* Page Header */}
       <div>
-        <h1 className="text-2xl font-bold">Categories</h1>
-        <p className="text-muted-foreground">Manage your product categories.</p>
+        <h1 className="text-xl font-bold sm:text-2xl">Categories</h1>
+
+        <p className="text-sm text-muted-foreground sm:text-base">
+          Manage your product categories.
+        </p>
       </div>
 
+      {/* Add Category */}
       <form
         onSubmit={handleSubmit(onSubmit)}
-        className="max-w-md space-y-4 rounded-lg border p-6"
+        className="w-full max-w-md space-y-4 rounded-lg border p-4 sm:p-6"
       >
         <div className="space-y-2">
           <Label htmlFor="name">Category name</Label>
@@ -56,18 +61,27 @@ function Categories() {
             <p className="text-sm text-destructive">{errors.name.message}</p>
           )}
         </div>
+
         {createCategory.isError && (
           <p className="text-sm text-destructive">
             {createCategory.error.message}
           </p>
         )}
-        <Button type="submit" disabled={createCategory.isPending}>
+
+        <Button
+          type="submit"
+          disabled={createCategory.isPending}
+          className="w-full sm:w-auto"
+        >
           {createCategory.isPending ? "Adding..." : "Add category"}
         </Button>
       </form>
 
-      <div className="space-y-3">
-        <h2 className="text-lg font-semibold">Existing categories</h2>
+      {/* Existing Categories */}
+      <div className="min-w-0 space-y-3">
+        <h2 className="text-base font-semibold sm:text-lg">
+          Existing categories
+        </h2>
 
         {categories.isLoading && (
           <p className="text-sm text-muted-foreground">Loading categories...</p>
@@ -88,14 +102,17 @@ function Categories() {
         {categories.data?.map((category) => (
           <div
             key={category.id}
-            className="flex items-center justify-between rounded-lg border p-4"
+            className="flex min-w-0 flex-col gap-2 rounded-lg border p-4 sm:flex-row sm:items-center sm:justify-between"
           >
-            <div>
-              <p className="font-medium">{category.name}</p>
-              <p className="text-sm text-muted-foreground">/{category.slug}</p>
+            <div className="min-w-0">
+              <p className="truncate font-medium">{category.name}</p>
+
+              <p className="truncate text-sm text-muted-foreground">
+                /{category.slug}
+              </p>
             </div>
 
-            <span className="text-sm text-muted-foreground">
+            <span className="shrink-0 text-sm text-muted-foreground">
               {category.active ? "Active" : "Inactive"}
             </span>
           </div>

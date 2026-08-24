@@ -33,23 +33,27 @@ function DashboardStats({ stats, isLoading = false }: DashboardStatsProps) {
   ];
 
   return (
-    <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+    <div className="grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-4">
       {items.map((item) => {
         const Icon = item.icon;
 
         return (
-          <Card key={item.title}>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0">
-              <CardTitle className="text-sm font-medium">
+          <Card key={item.title} className="min-w-0">
+            <CardHeader className="flex min-w-0 flex-row items-center justify-between space-y-0 p-4 sm:p-6">
+              <CardTitle className="truncate text-xs font-medium sm:text-sm">
                 {item.title}
               </CardTitle>
 
-              <Icon className="size-4 text-muted-foreground" />
+              <Icon className="ml-2 size-4 shrink-0 text-muted-foreground" />
             </CardHeader>
 
-            <CardContent>
-              <div className="text-2xl font-bold">
-                {isLoading ? <Skeleton className="h-8 w-16" /> : item.value}
+            <CardContent className="p-4 pt-0 sm:p-6 sm:pt-0">
+              <div className="text-xl font-bold sm:text-2xl">
+                {isLoading ? (
+                  <Skeleton className="h-7 w-14 sm:h-8 sm:w-16" />
+                ) : (
+                  item.value
+                )}
               </div>
             </CardContent>
           </Card>

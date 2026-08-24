@@ -20,8 +20,8 @@ function OrdersPagination({
   }
 
   return (
-    <div className="flex items-center justify-between gap-4">
-      <p className="text-sm text-muted-foreground">
+    <div className="flex items-center justify-between gap-3">
+      <p className="shrink-0 text-sm text-muted-foreground">
         Page {page} of {totalPages}
       </p>
 

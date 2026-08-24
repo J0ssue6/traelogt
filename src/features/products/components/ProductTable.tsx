@@ -31,7 +31,7 @@ function ProductTable({
             <TableHead>Product</TableHead>
             <TableHead>Slug</TableHead>
             <TableHead>Status</TableHead>
-            <TableHead className="text-right">Actions</TableHead>
+            <TableHead>Actions</TableHead>
           </TableRow>
         </TableHeader>
 

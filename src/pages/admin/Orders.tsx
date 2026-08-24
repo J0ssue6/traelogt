@@ -33,16 +33,18 @@ function Orders() {
   const selectedOrder = useOrder(selectedOrderId);
 
   return (
-    <div className="space-y-6">
+    <div className="w-full min-w-0 space-y-6">
+      {/* Page Header */}
       <div>
-        <h1 className="text-2xl font-bold">Orders</h1>
+        <h1 className="text-xl font-bold sm:text-2xl">Orders</h1>
 
-        <p className="text-muted-foreground">
+        <p className="text-sm text-muted-foreground sm:text-base">
           Manage customer orders and fulfillment.
         </p>
       </div>
 
-      <div className="flex flex-col gap-3 sm:flex-row">
+      {/* Filters */}
+      <div className="flex min-w-0 flex-col gap-3 sm:flex-row">
         <Input
           value={search}
           onChange={(event) => {
@@ -50,7 +52,7 @@ function Orders() {
             setPage(1);
           }}
           placeholder="Search by order number, customer, or phone..."
-          className="sm:max-w-md"
+          className="w-full sm:max-w-md"
         />
 
         <Select
@@ -64,7 +66,7 @@ function Orders() {
             <SelectValue placeholder="Filter by status" />
           </SelectTrigger>
 
-          <SelectContent className="max-h-[90vh] overflow-y-auto bg-background sm:max-w-2xl">
+          <SelectContent>
             <SelectItem value="all">All statuses</SelectItem>
             <SelectItem value="pending">Pending</SelectItem>
             <SelectItem value="confirmed">Confirmed</SelectItem>
@@ -76,10 +78,12 @@ function Orders() {
         </Select>
       </div>
 
+      {/* Loading */}
       {orders.isLoading && <OrdersTableSkeleton />}
 
+      {/* Error */}
       {orders.isError && (
-        <div className="rounded-lg border border-destructive/30 bg-destructive/5 p-6">
+        <div className="rounded-lg border border-destructive/30 bg-destructive/5 p-4 sm:p-6">
           <h3 className="font-medium">Unable to load orders</h3>
 
           <p className="mt-1 text-sm text-muted-foreground">
@@ -88,7 +92,7 @@ function Orders() {
 
           <Button
             variant="outline"
-            className="mt-4"
+            className="mt-4 w-full sm:w-auto"
             onClick={() => orders.refetch()}
           >
             Try again
@@ -96,10 +100,11 @@ function Orders() {
         </div>
       )}
 
+      {/* Orders */}
       {orders.isSuccess && (
         <>
           {orders.data.orders.length === 0 ? (
-            <div className="rounded-xl border border-dashed p-12 text-center">
+            <div className="rounded-xl border border-dashed p-8 text-center sm:p-12">
               <h3 className="text-lg font-semibold">No orders found</h3>
 
               <p className="mt-2 text-sm text-muted-foreground">
@@ -108,12 +113,14 @@ function Orders() {
             </div>
           ) : (
             <>
-              <OrdersTable
-                orders={orders.data.orders}
-                onSelect={(order) => {
-                  setSelectedOrderId(order.id);
-                }}
-              />
+              <div className="min-w-0">
+                <OrdersTable
+                  orders={orders.data.orders}
+                  onSelect={(order) => {
+                    setSelectedOrderId(order.id);
+                  }}
+                />
+              </div>
 
               <OrdersPagination
                 page={orders.data.page}
@@ -126,6 +133,7 @@ function Orders() {
         </>
       )}
 
+      {/* Order Details */}
       <OrderDetailDialog
         order={selectedOrder.data ?? null}
         open={Boolean(selectedOrderId)}
