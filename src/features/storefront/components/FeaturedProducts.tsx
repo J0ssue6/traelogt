@@ -4,9 +4,11 @@ import { Button } from "@/components/ui/button";
 
 import { useStorefrontProducts } from "@/features/storefront/hooks/useStorefrontProducts";
 import ProductGrid from "./StorefrontProductCard";
+import { useTranslation } from "react-i18next";
 
 function FeaturedProducts() {
   const navigate = useNavigate();
+  const { t } = useTranslation("home");
 
   const products = useStorefrontProducts({
     page: 1,
@@ -18,15 +20,15 @@ function FeaturedProducts() {
         <div className="mb-10 flex items-end justify-between gap-6">
           <div>
             <p className="text-sm font-semibold uppercase tracking-[0.2em] text-accent">
-              Shop
+              {t("featuredProducts.eyebrow")}
             </p>
 
             <h2 className="mt-3 text-3xl font-bold tracking-tight sm:text-4xl">
-              Featured products
+              {t("featuredProducts.title")}
             </h2>
 
             <p className="mt-4 max-w-xl text-muted-foreground">
-              Explore what's available on Traelogt.
+              {t("featuredProducts.description")}
             </p>
           </div>
 
@@ -35,16 +37,18 @@ function FeaturedProducts() {
             className="hidden sm:flex"
             onClick={() => navigate("/products")}
           >
-            View all
+            {t("featuredProducts.viewAll")}
           </Button>
         </div>
 
         {products.isError ? (
           <div className="rounded-xl border border-destructive/20 bg-destructive/5 p-8 text-center">
-            <h3 className="font-semibold">Unable to load products</h3>
+            <h3 className="font-semibold">
+              {t("featuredProducts.error.title")}
+            </h3>
 
             <p className="mt-2 text-sm text-muted-foreground">
-              Please try again shortly.
+              {t("featuredProducts.error.description")}
             </p>
 
             <Button
@@ -52,15 +56,17 @@ function FeaturedProducts() {
               className="mt-5"
               onClick={() => products.refetch()}
             >
-              Try again
+              {t("featuredProducts.error.retry")}
             </Button>
           </div>
         ) : products.data?.products.length === 0 ? (
           <div className="rounded-xl border border-dashed p-10 text-center">
-            <h3 className="font-semibold">Coming soon.</h3>
+            <h3 className="font-semibold">
+              {t("featuredProducts.empty.title")}
+            </h3>
 
             <p className="mt-2 text-sm text-muted-foreground">
-              We're getting the first Traelogt products ready.
+              {t("featuredProducts.empty.description")}
             </p>
           </div>
         ) : (
@@ -76,7 +82,7 @@ function FeaturedProducts() {
             className="w-full"
             onClick={() => navigate("/products")}
           >
-            View all products
+            {t("featuredProducts.viewAllProducts")}
           </Button>
         </div>
       </div>

@@ -5,14 +5,15 @@ import { useNavigate, useParams } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 
-import StoreHeader from "@/features/storefront/components/StoreHeader";
 import { useStorefrontProduct } from "@/features/storefront/hooks/useStorefrontProduct";
 import { useCart } from "@/features/cart/cart-context";
 import { toast } from "sonner";
+import { useTranslation } from "react-i18next";
 
 function ProductDetail() {
   const { slug = "" } = useParams();
   const navigate = useNavigate();
+  const { t } = useTranslation("productDetail");
 
   const product = useStorefrontProduct(slug);
   const { addItem } = useCart();
@@ -41,14 +42,12 @@ function ProductDetail() {
 
   if (product.isError) {
     return (
-      <main className="min-h-screen bg-background">
-        <StoreHeader />
-
+      <>
         <div className="mx-auto max-w-7xl px-6 py-20 text-center">
-          <h1 className="text-2xl font-bold">Unable to load product</h1>
+          <h1 className="text-2xl font-bold"> {t("states.unableToLoad")}</h1>
 
           <p className="mt-2 text-muted-foreground">
-            Please try again shortly.
+            {t("states.tryAgainMessage")}
           </p>
 
           <Button
@@ -56,23 +55,21 @@ function ProductDetail() {
             className="mt-6"
             onClick={() => product.refetch()}
           >
-            Try again
+            {t("states.tryAgain")}
           </Button>
         </div>
-      </main>
+      </>
     );
   }
 
   if (!product.data) {
     return (
-      <main className="min-h-screen bg-background">
-        <StoreHeader />
-
+      <>
         <div className="mx-auto max-w-7xl px-6 py-20 text-center">
-          <h1 className="text-2xl font-bold">Product not found</h1>
+          <h1 className="text-2xl font-bold">{t("states.productNotFound")}</h1>
 
           <p className="mt-2 text-muted-foreground">
-            This product may no longer be available.
+            {t("states.productUnavailable")}
           </p>
 
           <Button
@@ -80,10 +77,10 @@ function ProductDetail() {
             className="mt-6"
             onClick={() => navigate("/products")}
           >
-            Back to shop
+            {t("navigation.backToShop")}
           </Button>
         </div>
-      </main>
+      </>
     );
   }
 
@@ -126,9 +123,7 @@ function ProductDetail() {
   };
 
   return (
-    <main className="min-h-screen bg-background">
-      <StoreHeader />
-
+    <>
       <div className="mx-auto max-w-7xl px-6 py-8">
         <Button
           variant="ghost"
@@ -136,7 +131,7 @@ function ProductDetail() {
           onClick={() => navigate(-1)}
         >
           <ArrowLeft />
-          Back
+          {t("navigation.back")}
         </Button>
 
         <div className="grid gap-12 lg:grid-cols-2">
@@ -152,6 +147,7 @@ function ProductDetail() {
                 ) : (
                   <div className="flex h-full items-center justify-center text-muted-foreground">
                     No image available
+                    {t("product.noImage")}
                   </div>
                 )}
               </div>
@@ -204,7 +200,9 @@ function ProductDetail() {
 
             {variants.length > 0 && (
               <div className="mt-8">
-                <p className="mb-3 text-sm font-semibold">Options</p>
+                <p className="mb-3 text-sm font-semibold">
+                  {t("product.options")}
+                </p>
 
                 <div className="flex flex-wrap gap-2">
                   {variants.map((item, index) => (
@@ -230,8 +228,8 @@ function ProductDetail() {
               <div className="mt-8">
                 <p className="text-sm text-muted-foreground">
                   {variant.stock > 0
-                    ? `${variant.stock} available`
-                    : "Out of stock"}
+                    ? t("product.available", { count: variant.stock })
+                    : t("product.outOfStock")}
                 </p>
 
                 {variant.stock > 0 && (
@@ -266,7 +264,7 @@ function ProductDetail() {
                       onClick={handleAddToCart}
                     >
                       <ShoppingBag />
-                      Add to cart
+                      {t("cart.addToCart")}
                     </Button>
                   </div>
                 )}
@@ -275,7 +273,7 @@ function ProductDetail() {
           </div>
         </div>
       </div>
-    </main>
+    </>
   );
 }
 

@@ -68,6 +68,11 @@ const storefront = {
       language: "Idioma",
     },
   },
+  categories: {
+    loading: "Cargando categorías...",
+    error: "No se pueden cargar las categorías.",
+    empty: "Las categorías estarán disponibles próximamente.",
+  },
 };
 
 export default storefront;

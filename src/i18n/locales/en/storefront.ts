@@ -68,6 +68,11 @@ const storefront = {
       language: "Language",
     },
   },
+  categories: {
+    loading: "Loading categories...",
+    error: "Unable to load categories.",
+    empty: "Categories coming soon.",
+  },
 };
 
 export default storefront;

@@ -16,6 +16,8 @@ import esCart from "./locales/es/cart";
 import esCategories from "./locales/es/categories";
 import esHome from "./locales/es/home";
 import enStorefront from "./locales/en/storefront";
+import enProductDetail from "./locales/en/productDetail";
+import esProductDetail from "./locales/es/productDetail";
 
 const resources = {
   en: {
@@ -26,6 +28,7 @@ const resources = {
     categories: enCategories,
     home: enHome,
     storefront: enStorefront,
+    productDetail: enProductDetail,
   },
 
   es: {
@@ -36,6 +39,7 @@ const resources = {
     categories: esCategories,
     home: esHome,
     storefront: esStorefront,
+    productDetail: esProductDetail,
   },
 };
 

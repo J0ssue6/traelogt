@@ -5,10 +5,12 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 
 import { useCategories } from "@/features/categories/hooks/useCategories";
+import { useTranslation } from "react-i18next";
 
 function CategoryGrid() {
   const navigate = useNavigate();
   const categories = useCategories();
+  const { t } = useTranslation("storefront");
 
   if (categories.isLoading) {
     return (
@@ -28,7 +30,7 @@ function CategoryGrid() {
 
   if (categories.isError) {
     return (
-      <p className="text-sm text-destructive">Unable to load categories.</p>
+      <p className="text-sm text-destructive">{t("categories.grid.error")}</p>
     );
   }
 
@@ -38,7 +40,9 @@ function CategoryGrid() {
 
   if (activeCategories.length === 0) {
     return (
-      <p className="text-sm text-muted-foreground">Categories coming soon.</p>
+      <p className="text-sm text-muted-foreground">
+        {t("categories.grid.empty")}
+      </p>
     );
   }
 

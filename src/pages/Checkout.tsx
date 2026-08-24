@@ -5,7 +5,6 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import StoreHeader from "@/features/storefront/components/StoreHeader";
 import { useCart } from "@/features/cart/cart-context";
 import {
   createCustomerOrder,
@@ -88,9 +87,7 @@ function Checkout() {
   }
 
   return (
-    <main className="min-h-screen bg-background">
-      <StoreHeader />
-
+    <>
       <div className="mx-auto max-w-6xl px-6 py-12">
         <div className="mb-10">
           <p className="text-sm font-semibold uppercase tracking-[0.2em] text-accent">
@@ -243,7 +240,7 @@ function Checkout() {
           </aside>
         </div>
       </div>
-    </main>
+    </>
   );
 }
 
