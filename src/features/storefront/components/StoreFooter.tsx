@@ -16,7 +16,7 @@ function StoreFooter() {
   const { t } = useTranslation("storefront");
 
   return (
-    <footer className="border-t bg-background">
+    <footer className="hidden border-t bg-background md:block">
       <div className="mx-auto max-w-7xl px-4 sm:px-6">
         {/* Brand / introduction */}
         <div className="border-b py-14 sm:py-16 lg:py-20">

@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 
 import { useStorefrontProducts } from "@/features/storefront/hooks/useStorefrontProducts";
-import ProductGrid from "./StorefrontProductCard";
+import ProductGrid from "./ProductGrid";
 import { useTranslation } from "react-i18next";
 
 function FeaturedProducts() {

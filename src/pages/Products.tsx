@@ -7,7 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 
 import { useStorefrontProducts } from "@/features/storefront/hooks/useStorefrontProducts";
-import ProductGrid from "@/features/storefront/components/StorefrontProductCard";
+import ProductGrid from "@/features/storefront/components/ProductGrid";
 
 function Products() {
   const { t } = useTranslation("storefront");
@@ -57,12 +57,16 @@ function Products() {
     setSearchParams({});
   };
 
-  // Format category name for display
   const formattedCategory = category ? category.replace(/-/g, " ") : "";
+
+  const isLoading = products.isLoading;
+  const hasProducts = (products.data?.products.length ?? 0) > 0;
+  const isEmpty = !isLoading && !hasProducts;
 
   return (
     <>
-      <section className="border-b">
+      {/* Desktop products header */}
+      <section className="hidden border-b md:block">
         <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 sm:py-14">
           <p className="text-sm font-semibold uppercase tracking-[0.2em] text-accent">
             {t("header.navigation.shop")}
@@ -107,7 +111,47 @@ function Products() {
         </div>
       </section>
 
-      <section className="mx-auto max-w-7xl px-4 py-10 sm:px-6 sm:py-12">
+      {/* Mobile products header */}
+      <section className="border-b md:hidden">
+        <div className="mx-auto max-w-7xl px-4 py-5">
+          <div className="flex items-center justify-between gap-3">
+            <div className="min-w-0">
+              <p className="text-xs font-semibold uppercase tracking-[0.18em] text-accent">
+                {t("header.navigation.shop")}
+              </p>
+
+              <h1 className="mt-1 truncate text-2xl font-bold tracking-tight">
+                {category
+                  ? t("products.titleWithCategory")
+                  : t("products.title")}
+              </h1>
+            </div>
+
+            {(search || category) && (
+              <Button
+                type="button"
+                variant="outline"
+                size="icon"
+                className="shrink-0 rounded-full"
+                onClick={clearFilters}
+                aria-label={t("products.clear")}
+              >
+                <X />
+              </Button>
+            )}
+          </div>
+
+          {category && (
+            <p className="mt-2 text-sm text-muted-foreground">
+              {t("products.categoryDescription", {
+                category: formattedCategory,
+              })}
+            </p>
+          )}
+        </div>
+      </section>
+
+      <section className="mx-auto max-w-7xl px-4 py-6 sm:px-6 sm:py-12">
         {products.isError ? (
           <div className="rounded-xl border border-destructive/20 bg-destructive/5 p-8 text-center">
             <h2 className="font-semibold">{t("products.error.title")}</h2>
@@ -126,15 +170,19 @@ function Products() {
           </div>
         ) : (
           <>
-            <div className="mb-6 flex items-center justify-between">
+            {/* Product count — desktop only */}
+            <div className="mb-6 hidden items-center justify-between md:flex">
               <p className="text-sm text-muted-foreground">
-                {products.isLoading
+                {isLoading
                   ? t("products.loading")
-                  : t("products.productCount", { count: total })}
+                  : t("products.productCount", {
+                      count: total,
+                    })}
               </p>
             </div>
 
-            {!products.isLoading && products.data?.products.length === 0 ? (
+            {/* Loading / products / empty state */}
+            {isEmpty ? (
               <div className="rounded-xl border border-dashed p-12 text-center">
                 <h2 className="font-semibold">{t("products.empty.title")}</h2>
 
@@ -153,7 +201,7 @@ function Products() {
             ) : (
               <ProductGrid
                 products={products.data?.products ?? []}
-                isLoading={products.isLoading}
+                isLoading={isLoading}
               />
             )}
 

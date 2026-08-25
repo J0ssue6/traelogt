@@ -7,7 +7,6 @@ const home = {
       "Your marketplace for the things you want, the things you need, and the things you didn’t know you were looking for.",
     shopNow: "Shop now",
     exploreProducts: "Explore products",
-    // decorative in image area
     oneMarketplace: "One marketplace",
     littleBitEverything: "A little bit of everything.",
     exploreProductsSub:

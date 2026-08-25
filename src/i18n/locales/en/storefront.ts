@@ -27,6 +27,18 @@ const storefront = {
       shoppingBag: "Shopping bag",
     },
   },
+  mobileMore: {
+    preferences: {
+      appearance: "Appearane",
+    },
+  },
+  mobileFilters: {
+    all: "All",
+    new: "New",
+    popular: "Popular",
+    featured: "Featured",
+    categories: "Categories",
+  },
   footer: {
     brand: {
       description:

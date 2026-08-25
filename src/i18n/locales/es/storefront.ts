@@ -27,6 +27,18 @@ const storefront = {
       shoppingBag: "Bolsa de compras",
     },
   },
+  mobileMore: {
+    preferences: {
+      appearance: "Apariencia",
+    },
+  },
+  mobileFilters: {
+    all: "Todo",
+    new: "Novedades",
+    popular: "Popular",
+    featured: "Destacados",
+    categories: "Categorías",
+  },
   footer: {
     brand: {
       description:

@@ -1,5 +1,6 @@
 import HeroSection from "@/features/storefront/components/HeroSection";
 import FeaturedProducts from "@/features/storefront/components/FeaturedProducts";
+import MobileHomeFilters from "@/features/storefront/components/MobileHomeFilters";
 import CategoryGrid from "@/features/products/components/CategoryGrid";
 import { useTranslation } from "react-i18next";
 
@@ -9,6 +10,8 @@ function Home() {
   return (
     <>
       <HeroSection />
+
+      <MobileHomeFilters />
 
       <FeaturedProducts />
 
