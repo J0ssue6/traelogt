@@ -9,6 +9,7 @@ import { useStorefrontProduct } from "@/features/storefront/hooks/useStorefrontP
 import { useCart } from "@/features/cart/cart-context";
 import { toast } from "sonner";
 import { useTranslation } from "react-i18next";
+import { formatCurrency } from "@/lib/guatemala";
 
 function ProductDetail() {
   const { slug = "" } = useParams();
@@ -189,7 +190,9 @@ function ProductDetail() {
             </h1>
 
             {price !== null && (
-              <p className="mt-5 text-2xl font-semibold">${price.toFixed(2)}</p>
+              <p className="mt-5 text-2xl font-semibold">
+                {formatCurrency(+price.toFixed(2))}
+              </p>
             )}
 
             {currentProduct.description && (

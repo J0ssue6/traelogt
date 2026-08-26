@@ -52,6 +52,7 @@ export type OrderPayment = {
   admin_notes: string | null;
   created_at: string | null;
   updated_at: string | null;
+  shipping: number | null;
 };
 
 export type OrderWithItems = Order & {

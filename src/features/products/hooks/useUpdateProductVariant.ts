@@ -23,7 +23,7 @@ export function useUpdateProductVariant() {
 
     onSuccess: (_, variables) => {
       queryClient.invalidateQueries({
-        queryKey: [productQueryKeys.variants(variables.productId)],
+        queryKey: productQueryKeys.variants(variables.productId),
       });
     },
   });

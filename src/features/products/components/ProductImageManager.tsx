@@ -57,20 +57,30 @@ function ProductImageManager({ productId }: ProductImageManagerProps) {
   }, [productId]);
 
   const handleUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
+    const files = Array.from(event.target.files ?? []);
 
-    if (!file) return;
+    if (files.length === 0) return;
 
     try {
       setIsUploading(true);
       setError(null);
 
-      const image = await uploadProductImage(productId, file, images.length);
+      const uploadedImages: ProductImage[] = [];
 
-      setImages((current) => [...current, image]);
+      for (const [index, file] of files.entries()) {
+        const image = await uploadProductImage(
+          productId,
+          file,
+          images.length + index,
+        );
+
+        uploadedImages.push(image);
+      }
+
+      setImages((current) => [...current, ...uploadedImages]);
     } catch (err) {
       setError(
-        err instanceof Error ? err.message : "Unable to upload product image.",
+        err instanceof Error ? err.message : "Unable to upload product images.",
       );
     } finally {
       setIsUploading(false);
@@ -96,8 +106,9 @@ function ProductImageManager({ productId }: ProductImageManagerProps) {
     <div className="space-y-4">
       <div>
         <h3 className="text-lg font-semibold">Product images</h3>
+
         <p className="text-sm text-muted-foreground">
-          Add product photos for the storefront.
+          Add multiple product photos for the storefront.
         </p>
       </div>
 
@@ -147,13 +158,14 @@ function ProductImageManager({ productId }: ProductImageManagerProps) {
         <Input
           type="file"
           accept="image/jpeg,image/png,image/webp"
+          multiple
           disabled={isUploading}
           onChange={handleUpload}
         />
       </div>
 
       {isUploading && (
-        <p className="text-sm text-muted-foreground">Uploading image...</p>
+        <p className="text-sm text-muted-foreground">Uploading images...</p>
       )}
 
       {error && <p className="text-sm text-destructive">{error}</p>}

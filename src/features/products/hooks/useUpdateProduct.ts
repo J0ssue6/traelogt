@@ -17,7 +17,11 @@ export function useUpdateProduct() {
         description?: string | null;
         category_id: string;
       };
-    }) => updateProduct(id, { ...values, description: values.description ?? null }),
+    }) =>
+      updateProduct(id, {
+        ...values,
+        description: values.description ?? null,
+      }),
 
     onSuccess: () => {
       queryClient.invalidateQueries({

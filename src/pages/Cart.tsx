@@ -5,6 +5,7 @@ import { useTranslation } from "react-i18next";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { useCart } from "@/features/cart/cart-context";
+import { formatCurrency } from "@/lib/guatemala";
 
 function Cart() {
   const navigate = useNavigate();
@@ -84,7 +85,7 @@ function Cart() {
                       </div>
 
                       <p className="font-semibold">
-                        ${(item.price * item.quantity).toFixed(2)}
+                        {formatCurrency(item.price * item.quantity)}
                       </p>
                     </div>
 
@@ -143,7 +144,7 @@ function Cart() {
                 <span className="text-muted-foreground">
                   {t("summary.subtotal")}
                 </span>
-                <span>${subtotal.toFixed(2)}</span>
+                <span>{formatCurrency(subtotal)}</span>
               </div>
 
               <div className="flex justify-between">
@@ -158,7 +159,7 @@ function Cart() {
 
             <div className="flex justify-between text-lg font-semibold">
               <span>{t("summary.total")}</span>
-              <span>${subtotal.toFixed(2)}</span>
+              <span>{formatCurrency(subtotal)}</span>
             </div>
 
             <Button

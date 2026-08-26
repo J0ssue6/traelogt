@@ -13,6 +13,8 @@ import { useDebouncedValue } from "@/features/products/hooks/useDebouncedValue";
 import { useUpdateProduct } from "@/features/products/hooks/useUpdateProduct";
 import { useDeleteProduct } from "@/features/products/hooks/useDeleteProduct";
 
+import { uploadProductImage } from "@/features/products/api/product-images.api";
+
 import type { ProductFormValues } from "@/features/products/schemas/product.schema";
 import type { Product } from "@/features/products/types";
 
@@ -58,13 +60,45 @@ function Products() {
     setPage(1);
   }, [debouncedSearch]);
 
-  const handleSubmit = async (values: ProductFormValues) => {
-    await createProduct.mutateAsync({
+  /*
+   * CREATE PRODUCT
+   *
+   * Product creation happens first because we need the newly-created
+   * product ID before we can upload rows into product_images.
+   *
+   * The create mutation is also responsible for creating the
+   * default variant using the submitted price and stock.
+   */
+  const handleCreateSubmit = async (
+    values: ProductFormValues,
+    images: File[],
+  ) => {
+    const product = await createProduct.mutateAsync({
       ...values,
       description: values.description ?? null,
+      images,
     });
 
+    /*
+     * Upload every selected image after the product exists.
+     *
+     * product_images.product_id points at this product.
+     */
+    for (const [index, file] of images.entries()) {
+      await uploadProductImage(product.id, file, index);
+    }
+
+    /*
+     * Close only after product, variant, and all images
+     * have successfully completed.
+     */
     setIsCreateOpen(false);
+
+    /*
+     * Refresh the product list so the new product is immediately
+     * visible without a browser reload.
+     */
+    await products.refetch();
   };
 
   const handleManageVariants = (product: Product) => {
@@ -130,8 +164,9 @@ function Products() {
 
               {!categories.isLoading && !categories.isError && (
                 <ProductForm
+                  mode="create"
                   categories={categories.data ?? []}
-                  onSubmit={handleSubmit}
+                  onSubmit={handleCreateSubmit}
                   isSubmitting={createProduct.isPending}
                 />
               )}
@@ -339,11 +374,14 @@ function Products() {
               {editingProduct && (
                 <>
                   <ProductForm
+                    mode="edit"
                     categories={categories.data ?? []}
                     defaultValues={{
                       name: editingProduct.name,
                       description: editingProduct.description ?? "",
                       category_id: editingProduct.category_id ?? "",
+                      price: 0,
+                      stock: 0,
                     }}
                     onSubmit={async (values) => {
                       await updateProduct.mutateAsync({
@@ -352,6 +390,8 @@ function Products() {
                       });
 
                       setEditingProduct(null);
+
+                      await products.refetch();
                     }}
                     isSubmitting={updateProduct.isPending}
                   />
@@ -405,6 +445,8 @@ function Products() {
                 });
 
                 setProductToDelete(null);
+
+                await products.refetch();
               }}
             >
               {deleteProduct.isPending ? "Deleting..." : "Delete"}

@@ -1,4 +1,6 @@
 import { Badge } from "@/components/ui/badge";
+import { formatCurrency } from "@/lib/guatemala";
+
 import type { Order } from "../types";
 import {
   ORDER_STATUS_CLASSES,
@@ -31,6 +33,7 @@ function OrdersTable({ orders, onSelect }: OrdersTableProps) {
               <TableHead>Customer</TableHead>
               <TableHead>Items</TableHead>
               <TableHead>Location</TableHead>
+              <TableHead>Shipping</TableHead>
               <TableHead>Total</TableHead>
               <TableHead>Status</TableHead>
               <TableHead>Date</TableHead>
@@ -70,7 +73,15 @@ function OrdersTable({ orders, onSelect }: OrdersTableProps) {
                   </div>
                 </TableCell>
 
-                <TableCell className="font-medium">Q{order.total}</TableCell>
+                <TableCell>
+                  {order.shipping != null
+                    ? formatCurrency(Number(order.shipping))
+                    : "—"}
+                </TableCell>
+
+                <TableCell className="font-medium">
+                  {formatCurrency(Number(order.total))}
+                </TableCell>
 
                 <TableCell>
                   <Badge
@@ -130,10 +141,22 @@ function OrdersTable({ orders, onSelect }: OrdersTableProps) {
               <div className="min-w-0 text-right">
                 <p className="text-xs text-muted-foreground">Total</p>
 
-                <p className="mt-0.5 font-semibold">Q{order.total}</p>
+                <p className="mt-0.5 font-semibold">
+                  {formatCurrency(Number(order.total))}
+                </p>
               </div>
 
               <div className="min-w-0">
+                <p className="text-xs text-muted-foreground">Shipping</p>
+
+                <p className="mt-0.5 font-medium">
+                  {order.shipping != null
+                    ? formatCurrency(Number(order.shipping))
+                    : "—"}
+                </p>
+              </div>
+
+              <div className="min-w-0 text-right">
                 <p className="text-xs text-muted-foreground">Location</p>
 
                 <p className="mt-0.5 truncate">{order.municipality}</p>
@@ -143,7 +166,7 @@ function OrdersTable({ orders, onSelect }: OrdersTableProps) {
                 </p>
               </div>
 
-              <div className="min-w-0 text-right">
+              <div className="min-w-0">
                 <p className="text-xs text-muted-foreground">Date</p>
 
                 <p className="mt-0.5 text-sm text-muted-foreground">

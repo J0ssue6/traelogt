@@ -4,7 +4,7 @@ import { productQueryKeys } from "../query-keys";
 
 export function useProductVariants(productId: string) {
   return useQuery({
-    queryKey: [productQueryKeys.variants(productId)],
+    queryKey: productQueryKeys.variants(productId),
     queryFn: () => getProductVariants(productId),
     enabled: Boolean(productId),
   });

@@ -12,6 +12,11 @@ export type CheckoutCustomer = {
   notes: string;
 };
 
+export type DeliveryMethod =
+  | "delivery"
+  | "los-amates-pickup"
+  | "mariscos-pickup";
+
 export type CheckoutResult = {
   id: string;
   order_number: string;
@@ -23,6 +28,8 @@ export type CheckoutResult = {
 export async function createCustomerOrder(
   customer: CheckoutCustomer,
   items: CartItem[],
+  deliveryMethod: DeliveryMethod,
+  shippingCost: number,
 ): Promise<CheckoutResult> {
   if (items.length === 0) {
     throw new Error("Your cart is empty.");
@@ -40,6 +47,8 @@ export async function createCustomerOrder(
       variant_id: item.variantId,
       quantity: item.quantity,
     })),
+    p_delivery_method: deliveryMethod,
+    p_shipping: shippingCost,
   });
 
   if (error) {

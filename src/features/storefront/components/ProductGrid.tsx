@@ -4,6 +4,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 
 import type { StorefrontProduct } from "@/features/storefront/api/storefront.api";
+import { formatCurrency } from "@/lib/guatemala";
 
 type ProductGridProps = {
   products: StorefrontProduct[];
@@ -72,7 +73,9 @@ function ProductGrid({ products, isLoading = false }: ProductGridProps) {
               </h3>
 
               {lowestPrice !== null && (
-                <p className="mt-2 font-semibold">${lowestPrice.toFixed(2)}</p>
+                <p className="mt-2 font-semibold">
+                  {formatCurrency(lowestPrice)}
+                </p>
               )}
             </CardContent>
           </Card>
