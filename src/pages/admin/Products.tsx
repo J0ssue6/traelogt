@@ -190,7 +190,6 @@ function Products() {
         />
       </div>
 
-      {/* PRODUCTS */}
       <div className="min-w-0 space-y-3">
         <h2 className="text-base font-semibold sm:text-lg">
           Existing products
