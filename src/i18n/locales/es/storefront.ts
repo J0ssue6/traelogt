@@ -29,7 +29,14 @@ const storefront = {
   },
   mobileMore: {
     preferences: {
+      title: "Preferencias",
       appearance: "Apariencia",
+    },
+    support: {
+      title: "Suporte",
+    },
+    legal: {
+      title: "Legal",
     },
   },
   mobileFilters: {
