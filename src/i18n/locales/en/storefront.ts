@@ -73,9 +73,9 @@ const storefront = {
       },
       connect: {
         title: "Connect",
-        email: "hello@traelogt.com",
+        email: "jdiaz77711@gmail.com",
         instagram: "Instagram",
-        location: "Singapore",
+        location: "Guatemala",
       },
     },
     legal: {

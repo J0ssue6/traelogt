@@ -4,7 +4,7 @@ import { useTranslation } from "react-i18next";
 import {
   SiInstagram,
   SiFacebook,
-  SiTiktok,
+  // SiTiktok,
 } from "@icons-pack/react-simple-icons";
 
 import logo from "@/assets/logo.png";
@@ -90,9 +90,9 @@ function StoreFooter() {
               {t("footer.navigation.support.contact")}
             </FooterLink>
 
-            <FooterLink to="/faq">
+            {/* <FooterLink to="/faq">
               {t("footer.navigation.support.faq")}
-            </FooterLink>
+            </FooterLink> */}
 
             <FooterLink to="/shipping">
               {t("footer.navigation.support.shipping")}
@@ -111,6 +111,7 @@ function StoreFooter() {
             <div className="flex flex-wrap gap-x-5 gap-y-2">
               <a
                 href={siteConfig.social.instagram}
+                target="_blank"
                 className="text-sm text-muted-foreground transition-colors hover:text-foreground"
               >
                 <SiInstagram className="size-5 text-muted-foreground transition-colors hover:text-accent" />
@@ -118,17 +119,19 @@ function StoreFooter() {
 
               <a
                 href={siteConfig.social.facebook}
+                target="_blank"
                 className="text-sm text-muted-foreground transition-colors hover:text-foreground"
               >
                 <SiFacebook className="size-5 text-muted-foreground transition-colors hover:text-accent" />
               </a>
 
-              <a
+              {/* <a
                 href={siteConfig.social.tiktok}
+                target="_blank"
                 className="text-sm text-muted-foreground transition-colors hover:text-foreground"
               >
                 <SiTiktok className="size-5 text-muted-foreground transition-colors hover:text-accent" />
-              </a>
+              </a> */}
             </div>
 
             <div className="flex items-start gap-2 text-sm text-muted-foreground">

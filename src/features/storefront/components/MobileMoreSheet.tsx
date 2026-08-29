@@ -2,7 +2,7 @@ import {
   ChevronRight,
   FileText,
   Globe,
-  HelpCircle,
+  // HelpCircle,
   Info,
   Mail,
   Moon,
@@ -57,12 +57,12 @@ function MobileMoreSheet({ open, onOpenChange }: MobileMoreSheetProps) {
                 onNavigate={() => onOpenChange(false)}
               />
 
-              <MobileMoreLink
+              {/* <MobileMoreLink
                 to="/faq"
                 icon={<HelpCircle className="size-5" />}
                 label={t("footer.navigation.support.faq")}
                 onNavigate={() => onOpenChange(false)}
-              />
+              /> */}
 
               <MobileMoreLink
                 to="/shipping"

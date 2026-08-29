@@ -4,7 +4,7 @@ const home = {
     title: "Discover more.",
     titleHighlight: "Get it from Traelogt.",
     description:
-      "Your marketplace for the things you want, the things you need, and the things you didn’t know you were looking for.",
+      "Your marketplace for the things you want, the things you need, and the things you never knew you were looking for. **Can’t find it? Send us a photo and we’ll find it in China. We’ll give you a quote, and you decide.",
     shopNow: "Shop now",
     exploreProducts: "Explore products",
     oneMarketplace: "One marketplace",

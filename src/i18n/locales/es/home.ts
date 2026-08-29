@@ -4,7 +4,7 @@ const home = {
     title: "Descubre más.",
     titleHighlight: "Consíguelo en Traelogt.",
     description:
-      "Tu mercado para las cosas que quieres, las que necesitas y las que no sabías que estabas buscando.",
+      "Tu mercado para las cosas que quieres, las que necesitas y las que no sabías que estabas buscando. ¿No lo encuentras? Envíanos una foto y lo buscamos en China. Te cotizamos el producto y tú decides.",
     shopNow: "Comprar ahora",
     exploreProducts: "Explorar productos",
     oneMarketplace: "Un mercado",

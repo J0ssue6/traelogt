@@ -25,6 +25,10 @@ import { Toaster } from "./components/ui/sonner";
 import Categories from "./pages/Categories";
 import StorefrontLayout from "./layouts/StorefrontLayout";
 import ScrollToTop from "./components/ScrollTop";
+import Privacy from "./pages/Privacy";
+import Terms from "./pages/Terms";
+import Shipping from "./pages/Shipping";
+import Contact from "./pages/Contact";
 
 function App() {
   return (
@@ -45,6 +49,11 @@ function App() {
                 path="/order-confirmation/:orderNumber"
                 element={<OrderConfirmation />}
               />
+
+              <Route path="/privacy" element={<Privacy />} />
+              <Route path="/terms" element={<Terms />} />
+              <Route path="/shipping" element={<Shipping />} />
+              <Route path="/contact" element={<Contact />} />
             </Route>
 
             {/* ADMIN LOGIN */}
