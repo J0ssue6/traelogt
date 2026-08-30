@@ -4,7 +4,7 @@ import { categoriesQueryKeys } from "../query-keys";
 
 export function useCategories() {
   return useQuery({
-    queryKey: [categoriesQueryKeys.all],
+    queryKey: categoriesQueryKeys.all,
     queryFn: getCategories,
   });
 }

@@ -1,13 +1,13 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { createCategory } from "../api/categories.api";
+import { updateCategory } from "../api/categories.api";
 import { categoriesQueryKeys } from "../query-keys";
 
-export function useCreateCategory() {
+export function useUpdateCategory() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: ({ name, imageFile }: { name: string; imageFile?: File }) =>
-      createCategory(name, imageFile),
+    mutationFn: ({ id, name }: { id: string; name: string }) =>
+      updateCategory(id, name),
 
     onSuccess: () => {
       queryClient.invalidateQueries({
