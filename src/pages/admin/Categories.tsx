@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 
@@ -16,6 +17,8 @@ function Categories() {
   const categories = useCategories();
   const createCategory = useCreateCategory();
 
+  const [imageFile, setImageFile] = useState<File | undefined>();
+
   const {
     register,
     handleSubmit,
@@ -29,11 +32,18 @@ function Categories() {
   });
 
   const onSubmit = (values: CategoryFormValues) => {
-    createCategory.mutate(values.name, {
-      onSuccess: () => {
-        reset();
+    createCategory.mutate(
+      {
+        name: values.name,
+        imageFile,
       },
-    });
+      {
+        onSuccess: () => {
+          reset();
+          setImageFile(undefined);
+        },
+      },
+    );
   };
 
   return (
@@ -60,6 +70,19 @@ function Categories() {
           {errors.name && (
             <p className="text-sm text-destructive">{errors.name.message}</p>
           )}
+        </div>
+
+        <div className="space-y-2">
+          <Label htmlFor="image">Category image</Label>
+
+          <Input
+            id="image"
+            type="file"
+            accept="image/jpeg,image/png,image/webp"
+            onChange={(event) => {
+              setImageFile(event.target.files?.[0]);
+            }}
+          />
         </div>
 
         {createCategory.isError && (

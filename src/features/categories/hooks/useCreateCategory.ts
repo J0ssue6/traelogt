@@ -6,7 +6,9 @@ export function useCreateCategory() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: createCategory,
+    mutationFn: ({ name, imageFile }: { name: string; imageFile?: File }) =>
+      createCategory(name, imageFile),
+
     onSuccess: () => {
       queryClient.invalidateQueries({
         queryKey: [categoriesQueryKeys.all],
